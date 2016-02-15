@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <title>One Graph</title>
+  <script type="text/javascript" src="http://mbostock.github.com/d3/d3.v2.js"></script>
+  <script type="text/javascript">
+    SimpleGraph = function(elemid, options) {
+      var self = this;
+      this.chart = document.getElementById(elemid);
+      this.cx = this.chart.clientWidth;
+      this.cy = this.chart.clientHeight;
+      this.options = options || {};
+      this.options.xmax = options.xmax || 30;
+      this.options.xmin = options.xmin || 0;
+      this.options.ymax = options.ymax || 10;
+      this.options.ymin = options.ymin || 0;
+      this.numOfXTicks = (this.options.xmax - this.options.xmin + 1);
+      this.numOfYTicks = (this.options.ymax - this.options.ymin + 1);
+
+      this.padding = {
+        "top": this.options.title ? 40 : 20,
+        "right": 30,
+        "bottom": this.options.xlabel ? 60 : 10,
+        "left": this.options.ylabel ? 45 : 20
+      };
+
+      this.size = {
+        "width": this.cx - this.padding.left - this.padding.right - 120,
+        "height": this.cy - this.padding.top - this.padding.bottom
+      };
+
+      this.blockHeight = self.size.height / (self.numOfYTicks - 1);
+
+      // x-scale
+      this.x = d3.scale.linear()
+        .domain([this.options.xmin, this.options.xmax])
+        .range([0, this.size.width]);
+
+      // drag x-axis logic
+      this.downx = Math.NaN;
+
+      // y-scale (inverted domain)
+      this.y = d3.scale.linear()
+        .domain([this.options.ymax, this.options.ymin])
+        .nice()
+        .range([0, this.size.height])
+        .nice();
+
+      // drag y-axis logic
+      this.downy = Math.NaN;
+
+      this.dragged = this.selected = null;
+
+      this.line = d3.svg.line()
+        .x(function(d, i) {
+          return this.x(this.points[i].x);
+        })
+        .y(function(d, i) {
+          return this.y(this.points[i].y);
+        });
+
+      this.points = [{
+        x: 0,
+        y: 0,
+        draggable: false
+      }, {
+        x: 5,
+        y: 1,
+        draggable: true
+      }];
+
+      this.infos = [
+	  {
+        y: 2,
+        text: "收入會增加很多"
+      }, {
+        y: 1,
+        text: "收入會增加，但幅度不大"
+      }, {
+        y: 0,
+        text: "收入持平"
+      }, {
+        y: -1,
+        text: "可能會減少"
+      }];
+
+      this.vis = d3.select(this.chart).append("svg")
+        .attr("width", this.cx)
+        .attr("height", this.cy)
+        .append("g")
+        .attr("transform", "translate(" + this.padding.left + "," + this.padding.top + ")");
+
+      this.plot = this.vis.append("rect")
+        .attr("width", this.size.width)
+        .attr("height", this.size.height)
+        .style("fill", "#ffffff")
+        .attr("pointer-events", "all");
+      //this.plot.call(d3.behavior.zoom().x(this.x).y(this.y).on("zoom", this.redraw));
+
+      this.redraw();
+
+      this.vis.append("svg")
+        .attr("top", 0)
+        .attr("left", 0)
+        .attr("width", this.size.width)
+        .attr("height", this.size.height)
+        .attr("viewBox", "0 0 " + this.size.width + " " + this.size.height)
+        .attr("class", "line")
+        .append("path")
+        .attr("class", "line")
+        .attr("d", this.line(this.points));
+
+      this.update();
+
+      // add Chart Title
+      if (this.options.title) {
+        this.vis.append("text")
+          .attr("class", "axis")
+          .text(this.options.title)
+          .attr("x", this.size.width / 2)
+          .attr("dy", "-0.8em")
+          .style("text-anchor", "middle");
+      }
+
+      // Add the x-axis label
+      if (this.options.xlabel) {
+        this.vis.append("text")
+          .attr("class", "axis")
+          .text(this.options.xlabel)
+          .attr("x", this.size.width / 2)
+          .attr("y", this.size.height)
+          .attr("dy", "2.4em")
+          .style("text-anchor", "middle");
+      }
+
+      // add y-axis label
+      if (this.options.ylabel) {
+        this.vis.append("text")
+          .attr("class", "axis")
+          .text(this.options.ylabel)
+          .style("text-anchor", "middle")
+          .attr("writing-mode", "tb")
+          .attr("transform", "translate(" + -20 + " " + this.size.height / 2 + ")");
+      }
+
+      d3.select(this.chart)
+        .on("mousemove.drag", self.mousemove())
+        .on("touchmove.drag", self.mousemove())
+        .on("mouseup.drag", self.mouseup())
+        .on("touchend.drag", self.mouseup());
+
+      //this.redraw();
+    };
+
+    //
+    // SimpleGraph methods
+    //
+
+    SimpleGraph.prototype.update = function() {
+      var self = this;
+      var lines = this.vis.select("path").attr("d", this.line(this.points));
+
+      var circle = this.vis.select("svg").selectAll("circle")
+        .data(this.points, function(d) {
+          return d;
+        });
+
+      circle.enter().append("circle")
+        .attr("r", 12.0)
+        .style("cursor", function(d) {
+          return d.draggable ? "ns-resize" : "auto";
+        })
+        .on("mousedown.drag", self.datapoint_drag())
+        .on("touchstart.drag", self.datapoint_drag());
+
+      circle
+        .attr("class", function(d) {
+          return d === self.selected ? "selected" : null;
+        })
+        .attr("cx", function(d) {
+          return self.x(d.x);
+        })
+        .attr("cy", function(d) {
+          return self.y(d.y);
+        });
+
+      circle.exit().remove();
+
+      // 增加選擇說明
+      var info = this.vis.selectAll("text.info")
+        .data(this.infos, function(d) {
+          return d;
+        });
+
+      info.enter().append("text")
+        .text(function(d) {
+          return d.text;
+        }).on("click",function(d){
+		  this.points[1]={x:5,y : d.y};
+          this.update();
+		  
+		}.bind(this));
+
+	   info
+        .attr("class", function(d) {
+          var className = "info ";
+          var nearY;
+          if (self.selected) {
+            nearY = Math.round(self.selected.y);
+          }
+          if (nearY === d.y) {
+            className += " selected";
+          }
+          return className;
+        })
+        .attr("transform", function(d) {
+          return "translate(" + (self.size.width + 10) + " " + (self.y(d.y)) + ")";
+        });
+		
+      info.exit().remove();
+
+      if (d3.event && d3.event.keyCode) {
+        d3.event.preventDefault();
+        d3.event.stopPropagation();
+      }
+    }
+
+    SimpleGraph.prototype.datapoint_drag = function() {
+      var self = this;
+      return function(d) {
+        document.onselectstart = function() {
+          return false;
+        };
+        if (d.draggable) {
+          self.selected = self.dragged = d;
+          self.update();
+        }
+      }
+    };
+
+    SimpleGraph.prototype.mousemove = function() {
+      var self = this;
+      return function() {
+        var p = d3.svg.mouse(self.vis[0][0]);
+
+        if (self.dragged) {
+          self.dragged.y = self.y.invert(Math.max(0, Math.min(self.size.height, p[1])));
+          self.update();
+        }
+      }
+    };
+
+    SimpleGraph.prototype.mouseup = function() {
+      var self = this;
+      return function() {
+        var p = d3.svg.mouse(self.vis[0][0]);
+        document.onselectstart = function() {
+          return true;
+        };
+        d3.select('body').style("cursor", "auto");
+        if (self.dragged) {
+          var newY = p[1] / self.blockHeight;
+          if (newY < 1) {
+            newY = 1;
+          } else if (newY > (self.numOfYTicks - 2)) {
+            newY = self.numOfYTicks - 2;
+          }
+          self.dragged.y = Math.round(self.y.invert(Math.max(0, Math.min(self.size.height, (newY * self.blockHeight)))));
+          self.update();
+          self.dragged = null;
+        }
+      }
+    }
+
+    SimpleGraph.prototype.redraw = function() {
+      var self = this;
+      var tx = function(d) {
+          return "translate(" + self.x(d) + ",0)";
+        },
+        ty = function(d) {
+          return "translate(0," + self.y(d) + ")";
+        },
+        stroke = function(d) {
+          return d ? "#ccc" : "#666";
+        },
+        fx = self.x.tickFormat(self.numOfXTicks),
+        fy = self.y.tickFormat(self.numOfYTicks);
+
+      // Regenerate x-ticks…
+      var gx = self.vis.selectAll("g.x")
+        .data(self.x.ticks(self.numOfXTicks), String)
+        .attr("transform", tx);
+
+      gx.select("text")
+        .text(fx);
+
+      var gxe = gx.enter().insert("g", "a")
+        .attr("class", "x")
+        .attr("transform", tx);
+
+      gxe.append("line")
+        .attr("stroke", stroke)
+        .attr("y1", 0)
+        .attr("y2", self.size.height);
+
+      gxe.append("text")
+        .attr("class", "axis")
+        .attr("y", self.size.height)
+        .attr("dy", "1em")
+        .attr("text-anchor", "middle")
+        .text(fx);
+
+      gx.exit().remove();
+
+      // Regenerate y-ticks…
+      var gy = self.vis.selectAll("g.y")
+        .data(self.y.ticks(self.numOfYTicks), String)
+        .attr("transform", ty);
+
+      gy.select("text")
+        .text(fy);
+
+      var gye = gy.enter().insert("g", "a")
+        .attr("class", "y")
+        .attr("transform", ty)
+        .attr("background-fill", "#FE6");
+
+      gye.append("line")
+        .attr("stroke", stroke)
+        .attr("x1", 0)
+        .attr("x2", self.size.width);
+
+      /*gye.append("text")
+        .attr("class", "axis")
+        .attr("x", -3)
+        .attr("dy", ".35em")
+        .attr("text-anchor", "end")
+        .text(fy);*/
+
+      gy.exit().remove();
+      //self.plot.call(d3.behavior.zoom().x(self.x).y(self.y).on("zoom", self.redraw));
+      //self.update();
+
+
+    }
+  </script>
+  <style type="text/css">
+    body {
+      font: 12px sans-serif;
+    }
+
+    rect {
+      fill: #fff;
+    }
+
+    ul {
+      list-style-type: none;
+      margin: 0.5em 0em 0.5em 0em;
+      width: 100%;
+    }
+
+    ul li {
+      display: table-cell;
+      vertical-align: middle;
+      margin: 0em;
+      padding: 0em 1em;
+    }
+
+    .info {
+      font-size: 1em;
+    }
+
+    .info.selected {
+      fill: #00f;
+    }
+
+    .axis {
+      font-size: 1.5em;
+    }
+
+    .chart {
+      background-color: #F7F2C5;
+      width: 480px;
+      height: 300px;
+    }
+
+    circle,
+    .line {
+      fill: none;
+      stroke: steelblue;
+      stroke-width: 2px;
+    }
+
+    circle {
+      fill: steelblue;
+      fill-opacity: 0.5;
+      cursor: move;
+    }
+
+    circle.selected {
+      fill: #ff7f0e;
+      stroke: #ff7f0e;
+    }
+
+    circle:hover {
+      fill: #ff7f0e;
+      stroke: #707f0e;
+    }
+
+    circle.selected:hover {
+      fill: #ff7f0e;
+      stroke: #ff7f0e;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="chart1" class="chart"></div>
+  <script type="text/javascript">
+    graph = new SimpleGraph("chart1", {
+      "xmax": 6,
+      "xmin": -1,
+      "ymax": 3,
+      "ymin": -2,
+      "title": "",
+      "xlabel": "未來五年",
+      "ylabel": "調薪幅度"
+    });
+  </script>
+</body>
+
+</html>
