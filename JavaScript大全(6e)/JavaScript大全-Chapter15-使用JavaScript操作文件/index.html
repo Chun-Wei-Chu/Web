@@ -1,0 +1,337 @@
+﻿<!DOCTYPE HTML>
+<html>
+	<head>
+		<style>
+			html,body,table{
+				height: 100%;
+			}
+			
+			
+			#nav {color:blue;}
+			h1[lang="fr"] {color:green}
+			*[name="x"]{color:yellow}
+			h1 > strong {color:red;}
+			
+			div::-webkit-scrollbar { 
+				display: none; 
+			}
+		</style>
+		<!-- 最新編譯和最佳化的 CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	</head>
+	
+	<body bgcolor="white" onload="attr_onload();" style="overflow:hidden;font-family:cursive;">
+		<table  border="0" style="width:100%;height:98%;text-align: center;">
+			<tr >
+				<td style="width:60%;height:98%;">
+					<div style="width:98%;overflow:scroll;overflow-x:hidden;height:100%;">
+					
+						<div class="panel panel-default">
+						  <div class="panel-heading">CSS selectors<button id="Ex1" style="float:right;">show code</button></div>
+						  <div class="panel-body">
+							<h1 id="nav">my id is nav</h1>
+							<h1 name="x">my name is x</h1>
+							<h1 lang="fr">my lang is fr</h1>
+							<h1>This is <strong>very</strong> <strong>very</strong> important.</h1>
+							<h1>This is <em>really <strong>very</strong></em> important.</h1>
+						  </div>
+						</div>
+						
+						<br/>
+						
+						<div class="panel panel-default" >
+							 <div class="panel-heading">nodes operator <button id="Ex2" style="float:right;">show code</button></div>
+							 <div class="panel-body" >
+								<ul id="node_parent" style="float:left;" >123<li id="node_child">Coffee</li><li>Tea</li></ul><br/><br/><br/><br/>
+								
+								 <p id="parent"></p>
+								 <p id="childs"></p>
+								 <p id="firestchild"></p>
+								 <p id="nodeType"></p>
+								 <p id="nodeValue"></p>
+								 <p id="nodeName"></p>
+							</div>
+						</div>
+						
+						<br/>
+						
+						<div class="panel panel-default">
+							 <div class="panel-heading">attr <button id="Ex3" style="float:right;">show code</button></div>
+							 <div class="panel-body">
+								<p id="attr_first"></p>
+								<p id="attr_bgcolor"></p>
+								<p id="attr_onload"></p>
+							 </div>
+						</div>
+						
+						
+						<br/>
+						
+						<div class="panel panel-default">
+							 <div class="panel-heading">innerHtml <button id="Ex4" style="float:right;">show code</button></div>
+							 <div class="panel-body">
+								<button id="btn_innerHtml">innerHtml switch</button>
+								<div id="inner_panel">
+								</div>
+							 </div>
+						</div>
+											
+						<br/>
+						
+						<div class="panel panel-default">
+							 <div class="panel-heading">改變選定座標的src<button id="Ex5" style="float:right;">show code</button></div>
+							 <div class="panel-body">
+								<p id="locationX"></p>
+								<p id="locationY"></p>
+								<br/>
+								
+								<table border="0" style="margin:0 auto;width:90%;">
+									<tr>
+										<td style="float:center;">
+											<img id="img_location" src="http://www.sysjust.com.tw/images/home-about2.png"/>
+										</td>
+										<td >
+											<input id="input_locationX" style="float:left;"/><br/><br/>
+											<input id="input_locationY" style="float:left;"/>
+											<button id="btn_location" style="float:left;">Go</button>
+											
+										</td>
+									</tr>
+								</table>
+							 </div>
+
+						</div>
+						
+							<br/>
+						
+						<div class="panel panel-default">
+							 <div class="panel-heading">location & select onchange <button id="Ex6" style="float:right;">show code</button></div>
+							 <div class="panel-body">
+								<select onChange="function_EX6(this);">
+								<option value="#">請選擇</option>
+								<option value="https://www.google.com.tw">Google 台灣</option>
+								<option value="http://tw.yahoo.com">Yahoo! 奇摩</option>
+								<option value="http://www.php.net">PHP.net</option>
+								</select>
+							 </div>
+
+						</div>
+						
+									
+							<br/>
+						
+						<div class="panel panel-default">
+							 <div class="panel-heading">onclick and addEventListener <button id="Ex0" style="float:right;">show code</button></div>
+							 <div class="panel-body">
+								
+							 </div>
+
+						</div>
+						
+					</div>
+				</td>
+						
+				<td style="width:40%;height:100%;">
+					<div id="console" class="panel panel-default" style="width:100%;height:100%;overflow:scroll;overflow-x:hidden;">
+					  <div class="panel-heading">console<button onclick="requireFullscreen();" style="float:right;">fullScreen</button><button id="btn_ClearConsole" style="float:right;">clear</button></div>
+					  <div id="console_line" class="panel-body" style="text-align: left;white-space: pre-wrap;">
+						456
+					  </div>
+					</div>
+				
+				</td>
+			</tr>
+		</table>
+
+		<script>
+			function launchIntoFullscreen(element) {
+			  if(element.requestFullscreen) {
+				element.requestFullscreen();
+			  } else if(element.mozRequestFullScreen) {
+				element.mozRequestFullScreen();
+			  } else if(element.webkitRequestFullscreen) {
+				element.webkitRequestFullscreen();
+			  } else if(element.msRequestFullscreen) {
+				element.msRequestFullscreen();
+			  }
+			}
+			function requireFullscreen(){
+				launchIntoFullscreen(document.getElementById("console"));
+			}
+			
+			
+			$("#btn_ClearConsole").click(function(){
+				$("#console_line").empty();
+			});
+			
+			$("#Ex1").click(function(){
+				$("#console_line").empty();
+				$("#console_line").text('CSS:\n'
+				+'	#nav {color:blue;}\n	h1[lang="fr"] {color:green}\n'
+				+'	*[name="x"]{color:yellow}\n'
+				+'	h1 > strong {color:red;}\n\n'
+				+'Html:\n'
+				+'	<h1 id="nav">my id is nav</h1>\n'
+				+'	<h1 name="x">my name is x</h1>\n'
+				+'	<h1 lang="fr">my lang is fr</h1>\n'
+				+'	<h1>This is <strong>very</strong> <strong>very</strong> important.</h1>\n'
+				+'	<h1>This is <em>really <strong>very</strong></em> important.</h1>');
+			});
+			
+			/********************node operator**************************/
+			var tmp = document.getElementById("node_child");
+			$("#parent").text("parentNode: "+tmp.parentNode.id);
+			tmp = document.getElementById("node_parent");
+			$("#childs").text("childNodes_length: "+tmp.childNodes.length);
+			$("#firestchild").text("firstChild: " + JSON.stringify(tmp.firstChild.innerHTML));
+			$("#nodeType").text("nodeType: "+tmp.nodeType);
+			$("#nodeValue").text("nodeValue: "+tmp.firstChild.nodeValue);
+			$("#nodeName").text("nodeName: "+tmp.nodeName);
+			
+			$("#Ex2").click(function(){
+				$("#console_line").empty();
+				$("#console_line").text(
+					'Html:\n'
+				+'	<ul id="node_parent" style="float:left;" >123\n'
+				+'		<li id="node_child">Coffee</li>\n'
+				+'		<li>Tea</li>\n'
+				+'	</ul><br/><br/><br/><br/>\n\n'
+				+'	 <p id="parent"></p>\n'
+				+'	 <p id="childs"></p>\n'
+				+'	 <p id="firestchild"></p>\n'
+				+'	 <p id="nodeType"></p>\n'
+				+'	 <p id="nodeValue"></p>\n'
+				+'	 <p id="nodeName"></p>\n'
+				+'\nJS:\n'
+				+'	var tmp = document.getElementById("node_child");\n'
+				+'	$("#parent").text("parentNode: "+tmp.parentNode.id);\n'
+				+'	tmp = document.getElementById("node_parent");\n'
+				+'	$("#childs").text("childNodes_length: "+tmp.childNodes.length);\n'
+				+'	$("#firestchild").text("firstChild: "+JSON.stringify(tmp.firstChild.innerHTML));\n'
+				+'	$("#nodeType").text("nodeType: "+tmp.nodeType);\n'
+				+'	$("#nodeValue").text("nodeValue: "+tmp.firstChild.nodeValue);\n'
+				+'	$("#nodeName").text("nodeName: "+tmp.nodeName);\n'
+				);
+			});
+			/*************************************************/
+			function attr_onload(){
+				return "123";
+			}
+			
+			$("#attr_first").text(document.body.attributes[0].name);
+			$("#attr_bgcolor").text(document.body.attributes.bgcolor.value);
+			$("#attr_onload").text(document.body.attributes["ONLOAD"].value);
+			
+			$("#Ex3").click(function(){
+				$("#console_line").empty();
+				$("#console_line").text('Html:\n	<body bgcolor="white" onload="attr_onload();">\n'
+				+'\nJS:\n	$("#attr_first").text(document.body.attributes[0].name);\n'
+				+'	$("#attr_bgcolor").text(document.body.attributes.bgcolor.value);\n'
+				+'	$("#attr_onload").text(document.body.attributes["ONLOAD"].value);\n');
+			});
+			
+			/***************************************************/
+			document.getElementById("inner_panel").innerHTML="";
+			$("#btn_innerHtml").click(function(){
+				if(document.getElementById("inner_panel").innerHTML=="")
+					document.getElementById("inner_panel").innerHTML="hello world";
+				else
+					document.getElementById("inner_panel").innerHTML="";
+			});
+			$("#Ex4").click(function(){
+				$("#console_line").empty();
+				$("#console_line").text('Html:\n	<button id="btn_innerHtml">innerHtml switch</button>\n'
+								+'	<div id="inner_panel"></div>\n'
+								+'\nJS:\n	document.getElementById("inner_panel").innerHTML="";\n'
+								+'	$("#btn_innerHtml").click(function(){\n'
+								+'	if(document.getElementById("inner_panel").innerHTML=="")\n'
+								+'		document.getElementById("inner_panel").innerHTML="hello world";\n'
+								+'	else\n'
+								+'		document.getElementById("inner_panel").innerHTML="";\n'
+								+'	});');
+			});
+			
+			/***************************************************/
+			var location_x, location_y;
+			$(document).mousemove(function (e) {
+				
+				$("#locationX").text(e.pageX + document.documentElement.scrollTop);
+				$("#locationY").text(e.pageY + document.documentElement.scrollLeft);
+				location_x=e.pageX + document.documentElement.scrollTop;
+				location_y=e.pageY + document.documentElement.scrollLeft;
+			});
+			
+			$("#img_location").click(function(){
+				document.getElementById("input_locationX").value=location_x;
+				document.getElementById("input_locationY").value=location_y;
+			});
+			
+			$("#btn_location").click(function(){
+				document.elementFromPoint(document.getElementById("input_locationX").value, document.getElementById("input_locationY").value).src="http://www.sysjust.com.tw/images/home-about4-o.png";
+			});
+			
+			$("#Ex5").click(function(){
+				$("#console_line").empty();
+				$("#console_line").text('Html:\n'
+							+'	<p id="locationX"></p>\n'
+							+'		<p id="locationY"></p>\n'
+							+'		<br/>\n'								
+							+'		<table border="0" style="margin:0 auto;width:90%;">\n'
+							+'			<tr>\n'
+							+'				<td style="float:center;">\n'
+							+'				<img id="img_location" src="http://www.sysjust.com.tw/images/home-about2.png"/>\n'
+							+'			</td>\n'
+							+'			<td >\n'
+							+'				<input id="input_locationX" style="float:left;"/><br/><br/>\n'
+							+'				<input id="input_locationY" style="float:left;"/>\n'
+							+'				<button id="btn_location" style="float:left;">Go</button>\n'				
+							+'			</td>\n'
+							+'		</tr>\n'
+							+'	</table>\n'
+							+'\nJS:\n'
+							+'	var location_x, location_y;\n'
+							+'	$(document).mousemove(function (e) {\n'
+							+'		$("#locationX").text(e.pageX + document.documentElement.scrollTop);\n'
+							+'		$("#locationY").text(e.pageY + document.documentElement.scrollLeft);\n'
+							+'		location_x=e.pageX + document.documentElement.scrollTop;\n'
+							+'		location_y=e.pageY + document.documentElement.scrollLeft;\n'
+							+'	});\n'	
+							+'	$("#img_location").click(function(){\n'
+							+'		document.getElementById("input_locationX").value=location_x;\n'
+							+'		document.getElementById("input_locationY").value=location_y;\n'
+							+'	});\n'	
+							+'	$("#btn_location").click(function(){\n'
+							+'		document.elementFromPoint(document.getElementById("input_locationX").value, document.getElementById("input_locationY").value).src="http://www.sysjust.com.tw/images/home-about4-o.png";\n'
+							+'	}););\n'
+							+'	});\n')});
+			
+			/*****************************************************/
+			function function_EX6(tmp){
+				location = tmp.options[tmp.selectedIndex].value;
+			}
+			
+			$("#Ex6").click(function(){
+				$("#console_line").empty();
+				$("#console_line").text('Html:\n'
+				+'	<select onChange="function_EX6(this);">\n'
+				+'		<option value="#">請選擇</option>\n'
+				+'		<option value="https://www.google.com.tw">Google 台灣</option>\n'
+				+'		<option value="http://tw.yahoo.com">Yahoo! 奇摩</option>\n'
+				+'		<option value="http://www.php.net">PHP.net</option>\n'
+				+'	</select>\n'
+				+'\nJS:\n'
+				+'	function function_EX6(tmp){location = tmp.options[tmp.selectedIndex].value;}'
+				);
+			});
+			
+			/***************************************************/
+			$("#Ex7").click(function(){
+				$("#console_line").empty();
+				$("#console_line").text();
+			});
+	
+		</script>
+		
+	</body>
+</html>

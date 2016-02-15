@@ -1,0 +1,37 @@
+<html>
+	<head>
+		<style>
+			/* structure */
+			#kwicks { width: 590px; overflow-x: hidden; }
+			#kwicks:hover li a { width: 100px; }
+			#kwicks li { 
+				float: left; 
+				overflow-x: hidden; 
+				display: block; 
+			}
+			#kwicks li:hover a { width: 285px !important; }
+
+			/* individual kwicks */
+			#kwicks li a { 
+				display: block; 
+				text-indent: -9999px; 
+				width: 134px; 
+				height: 143px; 
+				transition-property: width;
+				transition-duration: 1s;
+			}
+			.image{
+				background:url(http://blog.turn.tw/wp-content/uploads/2014/11/react-opti.png) no-repeat;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<ul id="kwicks">
+			<li><a href="http://en.wikipedia.org/wiki/John_lennon" title="John Lennon" class="image">John Lennon</a></li>
+			<li><a href="http://en.wikipedia.org/wiki/Paul_mccartney" title="Paul McCartney" class="image">Paul McCartney</a></li>
+			<li><a href="http://en.wikipedia.org/wiki/George_harrison" title="George Harrison" class="image">George Harrison</a></li>
+			<li><a href="http://en.wikipedia.org/wiki/Ringo_starr" title="Ringo Starr" class="image">Ringo Starr</a></li>
+		</ul>
+	</body>
+</html>

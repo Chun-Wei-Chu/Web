@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<!---------------- table 選單 ------------------->	
+<style>
+section {
+  position: relative;
+  padding-top: 37px;
+  z-index:2;
+}
+
+td + td {
+  border-left:1px solid #eee;
+}
+td, th {
+  border-bottom:1px solid #eee;
+  padding: 3px 25px;
+}
+th {
+  height: 0;
+  line-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border: none;
+}
+th div{
+  position: absolute;
+  padding: 5px 25px;
+  top: 0;
+  margin-left: -25px;
+  line-height: normal;
+}
+th:first-child div{
+  border: none;
+}
+</style>
+
+<!---------並排DIV---------->
+<style>
+.TitleDivLeft{
+	display:inline
+}
+</style>
+
+<!--------------日曆------------>
+<style>
+    #test_calendar table{
+        border:1px solid #000;
+		border-collapse:collapse;
+    }
+    #test_calendar td{text-align:center;background-color:#fff;border:2px solid whitesmoke;}
+    #test_calendar td:hover{cursor:pointer;background-color:silver;}
+    #test_calendar tr:first-child td{        
+        cursor:none;background-color:silver;
+    }
+	
+	#SQlite_table_all td{text-align:center;border:2px solid whitesmoke;}
+	
+	#select_SQLTable td{text-align:center;background-color:#aaa;border:2px solid whitesmoke;}
+	//#select_SQLTable td:hover{cursor:pointer;background-color:silver;}
+	
+	/*#header {
+		position: fixed;
+		top: 0px;
+	}*/
+
+</style>
+
+<!--------- 長條圖表 -------->
+<style>
+path.slice{
+	stroke-width:2px;
+}
+polyline{
+	opacity: .3;
+	stroke: black;
+	stroke-width: 2px;
+	fill: none;
+} 
+svg text.percent{
+	fill:white;
+	text-anchor:middle;
+	font-size:12px;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  fill: orange;
+}
+
+.bar:hover {
+  fill: orangered ;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+</style>
+
+<!--------------下拉選單-------------->
+<style>
+//下拉式選單
+	body, ul.navigation, ul.navigation li, ul.navigation ul, a{
+    margin: 0;
+    padding: 0;
+    font-size: 13px;
+    text-decoration: none;
+}
+ul.navigation,ul.navigation li {
+    list-style: none;
+}
+
+ul.navigation li {
+    position: relative;
+    float: left;
+}
+/* 選單 li 裡面連結之樣式 */
+ul.navigation li a{
+    display: block;
+    padding: 12px 20px;
+    background: #888;
+    color: #FFF;
+}
+/* 特定在第一層，以左邊灰線分隔 */
+ul.navigation > li > a{
+    border-bottom: 1px solid #CCC;    
+    border-left: 1px solid #CCC;
+}
+ul.navigation > li > a:hover{
+    color: #666;
+    background: #DDD
+}
+/* 特定在第一層 > 第二層之後下拉部分之樣式 */
+ul.navigation li ul{
+    display: none;
+    float: left;
+    position: absolute;
+    left: 0;    
+    margin: 0;
+}
+/* 當第一層選單被觸發時，指定第二層顯示 */
+ul.navigation li:hover > ul{
+    display: block;
+}
+/* 特定在第二層或之後下拉部分 li 之樣式 */
+ul.navigation ul li {
+    border-bottom: 1px solid #DDD;
+}
+/* 特定在第二層或之後下拉部分 li （最後一項不要底線）之樣式 */
+ul.navigation ul li:last-child {
+    border-bottom: none;
+}
+/* 第二層或之後 選單 li 之樣式 */
+ul.navigation ul a {
+    width: 120px;
+    padding: 10px 12px;    
+    color: #666;        
+    background: #EEE;
+}
+ul.navigation ul a:hover {        
+    background: #CCC;    
+}
+/* 第三層之後，上一層的選單觸發則顯示出來（皆為橫向拓展） */
+ul.navigation ul li:hover > ul{
+    display: block;
+    position: absolute;
+    top: 0;    
+    left: 100%;
+}
+</style>
+
+<!---------------隱藏式左側滑動選單---------------->
+<!--style>
+#mwt_mwt_slider_scroll
+{
+	top: 0;
+	left:-360px;
+	width:360px;	
+	position:fixed;
+	z-index:9999;
+}
+ 
+#mwt_slider_content{
+	background:#3c5a98;
+	text-align:center;
+	padding-top:20px;
+}
+ 
+#mwt_fb_tab {
+	position:absolute;
+	top:20px;
+	right:-24px;
+	width:24px;
+	background:#3c5a98;
+	color:#ffffff;
+	font-family:Arial, Helvetica, sans-serif;	
+	text-align:center;
+	padding:9px 0;
+ 
+	-moz-border-radius-topright:10px;
+	-moz-border-radius-bottomright:10px;
+	-webkit-border-top-right-radius:10px;
+	-webkit-border-bottom-right-radius:10px;	
+}
+#mwt_fb_tab span {
+	display:block;
+	height:12px;
+	padding:1px 0;
+	line-height:12px;
+	text-transform:uppercase;/*全大寫?*/
+	font-size:12px;
+}
+</style-->
+
+<body>
+	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
+	
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+	
+	<!-------彈出視窗------->
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.min.js"></script>
+	<link rel="stylesheet" href="reveal.css">	
+	<script type="text/javascript" src="jquery.reveal.js"></script>
+<!------------------frozen header--------------------------->
+<div class=jumbotron style="background:#dddddd">
+<div class=container>
+<table align="center" style=" border-collapse:collapse">
+	<tr>
+		<td >
+			<h1>Table Name</h1>
+			<select id="tableName" onchange="changeSelectTable(this.options[this.selectedIndex].value);">
+			</select>
+		</td>
+		<td>
+			<div id="header"  align="center">
+				<div id="test_calendar" >
+					<div id="calendar"></div>
+				</div>
+
+				<script id="calendar_temp" type="text/template">
+					<div id="ktcalendar" style="width:600px ;background-color:whitesmoke;">
+						<div style="overflow:hidden;">
+							<div  style="float:left;width:10%;">
+								<button id="preyear" type="button">&#12298;</button>
+							</div>
+							<div  style="float:left;width:10%;">
+								<button id="premonth" type="button">&#12296;</button>
+							</div>
+							<div style="float:left;width:60%;overflow:hidden;" >
+								<div style="float:left;width:100%;text-align:center;" id="thisYear" ></div>
+							</div>
+							<div style="float:right;width:10%;text-align:right;">
+								<button id="nextyear" type="button">&#12299;</button>
+							</div>
+							<div style="float:right;width:10%;text-align:right;">
+								<button id="nextmonth" type="button">&#12297;</button>
+							</div>
+						</div>
+						<div>
+							<table id="calendarbody" style="width:100%">
+								<tbody id="calendarbody_tbody">
+									<tr><td>日</td><td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td>六</td></tr>
+								</tbody>
+							</table>
+						</div>
+					</div>	
+				</script><br />
+
+				<div id="select_SQLTable" >
+					<table width="600" border="0">
+						<tr align="center">
+							<td width=70%>
+								<ul class="navigation" width="600">	
+									<li><a id="choose_All" onclick="showSQLTable(this,'SQlite_table_all',0);">All</a></li>
+									<li><a id="choose_Non_info" onclick="showSQLTable(this,'SQlite_table_nonInfo',1);" >Non-Info</a></li>
+									<li>
+										<a>Graph</a>
+										<ul style="z-index:3;">
+											<li><a id="show_graph_by_month" onclick="RecreateGraph();ifGraph = true">This Month</a></li>
+											<li><a  class="big-link" data-reveal-id="myModal" data-animation="fade">Range</a></li>
+										</ul>
+									</li>			
+								</ul>
+							</td>
+							<td id="status" width=30% style="color:#aaeeaa"></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</td>
+	</tr>
+</table>
+</div>
+</div>
+<!------------------non-frozen body--------------------------->
+<!------------ table: 顯示所有資訊 ----------------->
+<div align="center">
+	<section id="table_body" >
+		<div id="SQlite_table_all" ></div>
+		<div id="SQlite_table_nonInfo"> </div>
+		<br />
+		<div id="for_future">
+		</div></br >
+	</section></br >
+</div>
+<!--------------- 顯示當月圖表 ------------------------>
+<div id="graph_body" align="center">
+</div><br />
+
+<!------------選擇日期對話框--------------->
+<div id="myModal" class="reveal-modal">
+	<h1>選擇分析範圍</h1>
+	<p>Range begin: <input id="myModal_begin" type="text" placeholder="2015-01-01"></input></p>
+	<p>Range end: <input id="myModal_end" type="text" placeholder="2015-12-25"></input></p>
+	<button onclick="getSummaryDataFromSelfChange(document.getElementById('myModal_begin').value, document.getElementById('myModal_end').value);">submit</button>
+	<a class="close-reveal-modal">&#215;</a>
+</div>
+<!------------DetailMsg對話框--------------->
+<div id="DetailMsg" class="reveal-modal" >
+	<h1 id="DetailMsg_id"></h1>
+	<p id="DetailMsg_msg"></p>
+	<a class="close-reveal-modal">&#215;</a>
+</div>
+
+
+
+</body>
+<!------------------script------------------->
+<!------------------- 全域變數 ------------------------->
+<script>	
+	/*改變要觀看的資訊*/
+	var global=[];
+	global["localhost"]="http://localhost:45450";
+	global["currentLayer"]= "choose_All";
+	global["currentDiv"] = "SQlite_table_all";
+	global["SelectTableName"] ="Hub";
+	
+	global["InnerTableHight"]=(window.innerHeight-document.getElementById('header').offsetHeight)*2/3;
+	$("#SQlite_table_all").attr("style", "overflow-y: auto;height:"+global["InnerTableHight"]+"px");
+	$("#SQlite_table_nonInfo").attr("style", "display:none;overflow-y: auto;height:"+global["InnerTableHight"]+"px");
+	
+	/*紀錄選取日期後回傳的資料和篩選過的資料*/
+	global["DataPool"]=[];
+	
+	/*用來判定偵測滾動時的對應動作*/
+	var ifGraph = true;
+</script>
+
+<!--------------------取得當前table主題------------------->
+<script>
+	onstartinitialTable();
+	function onstartinitialTable(){
+		var getHttpRequest = global["localhost"]+"/logsvc/query/api=4";
+		$.ajax
+		(
+			{
+				type: 'GET',
+				url: getHttpRequest,
+				dataType: 'json',
+				success: function (response, type, xhr)
+				{
+						for(var key in response){
+							if(response[key].detailmsg=="Hub")
+								$("#tableName").append("<option selected='true' value='"+response[key].detailmsg+"'>"+response[key].detailmsg+"</option>");
+							else
+								$("#tableName").append("<option value='"+response[key].detailmsg+"'>"+response[key].detailmsg+"</option>");
+						}
+				},
+				error: function (xhr)
+				{
+				   $("#status").text("");
+				}
+			}
+		);
+	}
+	
+	function changeSelectTable(value){
+		global["SelectTableName"] = value;
+	}	
+</script>
+
+<!------------------- 日曆 ------------------------>
+<script>
+	/*創建日曆 取得今日時間 日曆所需大小*/
+    document.getElementById('calendar').innerHTML = document.getElementById('calendar_temp').textContent;
+    for (var i = 0; i < 6; i++) {
+        var tr = document.createElement('tr');
+        document.getElementById('calendarbody_tbody').appendChild(tr);
+        for (var j = 0; j < 7; j++) {
+            var td = document.createElement('td');
+            tr.appendChild(td);
+        }
+    }   
+    var thisYear = (new Date()).getFullYear();
+    var thisMonth = (new Date()).getMonth() ;
+
+
+ setCalendar();
+
+    function setCalendar() { 
+
+        var firstDay_week = (new Date(thisYear, thisMonth, 1)).getDay();
+        var lastDay = (new Date(thisYear, thisMonth + 1, 0)).getDate();
+        document.getElementById('thisYear').textContent = (thisYear + "-" + (thisMonth+1));
+
+        var trs = document.querySelectorAll('#calendarbody tr');
+        var day = 0;
+        var days = [];
+        for (w = firstDay_week ; w < (lastDay + firstDay_week) ; w++) {
+            day++;
+            days[w] = day;
+        }
+        var week_day_index = 0;
+        for (i = 0; i < trs.length; i++) {
+            var calendar_tds = trs[i].querySelectorAll('td');
+            if (i > 0) {
+                for (j = 0; j < calendar_tds.length; j++) {                    
+                    calendar_tds[j].textContent = days[week_day_index] == undefined ? '' : days[week_day_index] ;
+                    calendar_tds[j].dataset.yymmdd = thisYear + '/' + (thisMonth + 1)+ '/' + days[week_day_index]
+                    calendar_tds[j].onclick = function () {
+						document.getElementById("graph_body").innerHTML="";
+						$("#status").text("Waiting");
+                        getSQLiteDataByDate(this.dataset.yymmdd); 
+						ifGraph = false;
+						document.getElementById("table_body").style.display = "block";
+                    };
+                    week_day_index++;                  
+                }
+            }
+            if (i > 4 ) {
+                if (typeof (calendar_tds[0].textContent) == 'undefined' ||
+                    calendar_tds[0].textContent == null ||
+                    calendar_tds[0].textContent.length == 0) {
+                    trs[i].style.display = 'none'; 
+                } else { 
+                    trs[i].style.display = '';  
+                }
+            } 
+        }
+    }
+
+    document.getElementById('premonth').onclick = function () {    
+
+        thisMonth--;
+        if (thisMonth < 0) {
+            thisMonth = 11;
+            thisYear -= 1;
+        } 
+        setCalendar(); 
+    }
+    document.getElementById('nextmonth').onclick = function () {   
+
+        thisMonth++;
+        if (thisMonth > 11) {
+            thisMonth = 0;
+            thisYear += 1;
+        }
+        setCalendar();
+    }
+	document.getElementById('nextyear').onclick = function () {   
+
+        thisYear++;
+        setCalendar();
+    }
+	
+	document.getElementById('preyear').onclick = function () {   
+
+        if(thisYear>0){
+			thisYear--;
+			setCalendar();
+		}
+    }
+	
+	/*當按特定日期時執行getSQLiteDataByDate function 傳入值為選擇日期ex:2015-11-27*/
+	function getSQLiteDataByDate(date){
+		if(date.replace(/[0-9]*\//ig,"").length==1){
+			date = date.replace(/([0-9]*\/[0-9]*\/)/,"$10");
+		}
+		var getHttpRequest = global["localhost"]+"/logsvc/query/api=2|value="+date.replace(/\//ig,"-")+"|table="+global["SelectTableName"];
+		$.ajax
+        (
+            {
+                type: 'GET',
+                url: getHttpRequest,
+                dataType: 'json',
+                success: function (response, type, xhr)
+                {
+					$("#status").text("");
+                    //console.log('A: ' + JSON.stringify(response));
+					global["DataPool"]["SQlite_table_all"] = response.Data;
+					createCommonDataTable("SQlite_table_all", global["DataPool"]["SQlite_table_all"], response.Columns);
+					
+					global["DataPool"]["SQlite_table_nonInfo"] =[];
+					for(var i=0;i< global["DataPool"]["SQlite_table_all"].length;i++){
+						if(global["DataPool"]["SQlite_table_all"][i][2]!==64){					
+							global["DataPool"]["SQlite_table_nonInfo"].push(global["DataPool"]["SQlite_table_all"][i]);
+						}
+					}
+					createCommonDataTable("SQlite_table_nonInfo", global["DataPool"]["SQlite_table_nonInfo"], response.Columns);
+                },
+                error: function (xhr)
+                {
+                   $("#status").text("");
+                }
+            }
+        );
+	}
+	 
+	/*傳入參數，建立table中column成員*/
+	function createCommonDataTable(divID, table_inner_data, columns){
+		/*for(var key in table_inner_data[0]){
+			columns.push(key);
+		}*/
+		document.getElementById(divID).innerHTML="";
+	
+		var table = d3.select("#"+divID).append("table"),
+			thead = table.append("thead"),
+			tbody = table.append("tbody").attr("id",(divID+"tbody"));
+		
+		thead.append("tr")
+			.selectAll("th")
+				.data(columns)
+			.enter()
+			.append("th")
+			.append("div")
+			.text(function(column) { return column; });
+		
+		/*初始化index 開始建表*/
+		table_inner_data.index=0;
+		add_SQLite_tr(table_inner_data, tbody);
+			
+		/*add color to row*/	
+		/*var rows = tbody.selectAll("tr")
+		  .data(table_inner_data)
+			.enter()
+		  .append("tr")
+		  .attr("style",
+			function(d){
+				if(d.level=="16"){return "background-color:#ffaa44";}
+				else if(d.level=="8"){return "background-color:#ffaaaa";}
+				else if(d.level=="4"){return "background-color:#aaffaa";}
+				else return "background-color:white";
+			});
+			
+		rows.selectAll("td")
+		  .data(function(row) {
+			  return columns.map(function(column) {
+				  //test for onclick if need
+				  //this.onclick=function(){console.log(row
+				  if(column=="level"){
+						switch(row.level){
+							case "1":
+								return {column: column, value: "Emergency"};
+							case "2":
+								return {column: column, value: "Alert"};
+							case "4":
+								return {column: column, value: "Critical"};
+							case "8":
+								return {column: column, value: "Error"};
+							case "16":
+								return {column: column, value: "Warning"};
+							case "32":
+								return {column: column, value: "Notice"};
+							case "64":
+								return {column: column, value: "Info"};
+							case "128":
+								return {column: column, value: "UIAction"};
+							case "256":
+								return {column: column, value: "Debug"};
+							case "512":
+								return {column: column, value: "Max"};
+							default:
+								return {column: column, value: "Undefine"};
+						}
+				  }
+				  return {column: column, value: row[column]};
+			  });
+		  })
+		.enter()
+		  .append("td")
+		  .text(function(d) { return d.value; });*/  
+		  
+		  /*取得相對於header的高度，計算可移動的table的起始位置*/
+		  /*var height = document.getElementById('header').offsetHeight;
+		  var tmp_string = "margin-top:"+height+"px; overflow: auto"
+		  $("#table_body").attr("style",tmp_string);
+		  */
+		  /*讀取新的檔案之後back to top*/
+		  //$('html, body').animate({ scrollTop: 0 }, 'fast');
+		  $('#'+divID).animate({ scrollTop: 0 }, 'fast');	  
+	}
+	
+	/*即時增加table中的成員*/
+	function add_SQLite_tr(table_inner_data, tbody){
+		var i;
+		for(i=table_inner_data.index;i < table_inner_data.index+30 && i<table_inner_data.length;i++){
+			var tr = tbody.append("tr").attr("style", getClassColor(table_inner_data[i][2]));
+			
+			for(var j=0; j < table_inner_data[i].length;j++){
+				if(j==2){
+					switch(table_inner_data[i][j]){
+						case 1:
+							tr.append("td").text("Emergency");break;
+						case 2:
+							tr.append("td").text("Alert");break;
+						case 4:
+							tr.append("td").text("Critical");break;
+						case 8:
+							tr.append("td").text("Error");break;
+						case 16:
+							tr.append("td").text("Warning");break;
+						case 32:
+							tr.append("td").text("Notice");break;
+						case 64:
+							tr.append("td").text("Info");break;
+						case 128:
+							tr.append("td").text("UIAction");break;
+						case 256:
+							tr.append("td").text("Debug");break;
+						case 512:
+							tr.append("td").text("Max");break;
+						default:
+							tr.append("td").text("Undefined");break;
+					}
+				}else if(j==0){
+					tr.append("td").attr("onclick","getDetailMsg('"+table_inner_data[i][j]+"');").text(table_inner_data[i][j]);
+				}else{
+					if(table_inner_data[i][j]==null)
+						tr.append("td").text("NULL");
+					else
+						tr.append("td").text(table_inner_data[i][j]);
+				}
+			}
+		}
+		table_inner_data.index = i;
+	}
+	/*以不同顏色為level分類*/
+	function getClassColor(LogLevel){
+		if(LogLevel==16){return "background-color:#ffaa44";}
+		else if(LogLevel==8){return "background-color:#ffaaaa";}
+		else if(LogLevel==4){return "background-color:#aaffaa";}
+		else return "background-color:white";
+	}
+	
+	//var DataCurrent = global["DataPool"]["SQlite_table_all"];
+	function showSQLTable(obj,div,cIndex){
+		//$('html, body').animate({ scrollTop: 0 }, 'fast');
+		if(global["currentLayer"]!=obj.id) {
+			//先改變上一個頁籤及頁面的樣式
+			showIt(global["currentLayer"],global["currentDiv"],false);
+			//重設currentLayer及global["currentDiv"]的值
+			global["currentLayer"] = obj.id;
+			global["currentDiv"] = div;
+			
+			//最後再改變目前頁籤及頁面的樣式
+			showIt(global["currentLayer"] ,global["currentDiv"],true);
+		}
+	}
+	
+	function getDetailMsg(guid){
+		var getHttpRequest = global["localhost"]+"/logsvc/query/api=3|value="+guid+"|table="+global["SelectTableName"];
+		$.ajax
+        (
+            {
+                type: 'GET',
+                url: getHttpRequest,
+                dataType: 'json',
+                success: function (response, type, xhr)
+                {
+					if(response[0]!=undefined){
+						$("#DetailMsg_id").text(response[0].id);
+						$("#DetailMsg_msg").text(response[0].detailmsg);
+						$("#DetailMsg").reveal();
+						//alert("id :\n	"+response[0].id+"\n\ndetailmsg :\n	"+response[0].detailmsg);
+					}
+                },
+                error: function (xhr)
+                {
+                   
+                }
+            }
+        );
+	}
+</script>
+
+<!---------------------- 頁面控制項 -------------------------->
+<script>
+	function showIt(o,d,mode){
+		var obj = document.getElementById(o);
+		var div = document.getElementById(d);
+		//改變className則表示改變該元素所用的class
+		obj.className = mode?"active":"inactive";
+		div.style.display = mode?"block":"none";
+		//可以直接寫div.style.backgroundColor = colorArray[cIndex]
+	}
+	
+	/*偵測scroll行為，動態增加innerHtml*/
+	/* $(window).bind('scroll', function() {
+         //console.log(window.innerHeight,window.scrollY ,document.body.offsetHeight);
+         
+         if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight)) {
+			if(ifGraph == false)
+				add_SQLite_tr(global["DataPool"][global["currentDiv"]], d3.select("#"+global["currentDiv"]+"tbody"));
+          }
+      });*/
+	  
+	  $("#SQlite_table_all").bind('scroll', function() {
+			if($("#SQlite_table_all").scrollTop()>global["InnerTableHight"]/2 && ifGraph == false)
+				add_SQLite_tr(global["DataPool"][global["currentDiv"]], d3.select("#"+global["currentDiv"]+"tbody"));
+	  });
+	  $("#SQlite_table_nonInfo").bind('scroll', function() {
+			if($("#SQlite_table_all").scrollTop()>global["InnerTableHight"]/2 && ifGraph == false)
+				add_SQLite_tr(global["DataPool"][global["currentDiv"]], d3.select("#"+global["currentDiv"]+"tbody"));
+	  });
+</script>
+
+<!------------------- 長條圖 ------------------------>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<script>
+	//訂_body的起始位置grahp
+	/*var tmp_string = "margin-top:"+document.getElementById('header').offsetHeight+"px; overflow: auto";
+	$("#graph_body").attr("style",tmp_string);
+	*/
+	createMonthGraph(((new Date()).getFullYear())+"-"+((new Date()).getMonth()+1));
+	
+	/*grapg on click listener*/
+	function RecreateGraph(){
+		document.getElementById("graph_body").innerHTML="";
+		createMonthGraph($("#thisYear").text());
+	}
+	function createMonthGraph(Year_Month){
+		document.getElementById("table_body").style.display = "none";
+		$("#status").text("Waiting");
+		/*取得選取部分的總時間*/
+		var days=(new Date(Year_Month.replace(/-[0-9]*/,""),Year_Month.replace(/[0-9]*-/,""),0)).getDate();
+		
+		var getHttpRequest = global["localhost"]+"/logsvc/query/api=1|begin=" + Year_Month+"-01" + "|end=" + Year_Month+"-"+days+"|table="+global["SelectTableName"];
+		$.ajax
+        (
+            {
+                type: 'GET',
+                url: getHttpRequest,
+                dataType: 'json',
+                success: function (response, type, xhr)
+                {
+					$("#status").text("");
+					/*開始畫圖*/	
+					if(response[0]!=undefined)
+						drawBarChart("graph_body", response);
+					//console.log(JSON.stringify(response));
+                },
+                error: function (xhr)
+                {
+                   $("#status").text("");
+				   $("#graph_body").append("<h1>No Data</h1>");
+                }
+            }
+        );
+	}
+	
+	/*畫長條圖主code 傳入第一個參數是畫圖位置，第二個式資料type為Array*/
+	function drawBarChart(DrawLocation, SummaryData){	
+		var svg2;
+		
+		//調整長條圖的邊界，調整left值可避免左側數值被切掉問題
+		var margin = {top: 40, right: 20, bottom: 60, left: 60},
+			width = (SummaryData.length*200+200)>960?960:(SummaryData.length*200+200) - margin.left - margin.right,
+			height = 500 - margin.top - margin.bottom;
+			
+			//.format(".n%")其中n代表顯示至小數點後幾位
+			var formatPercent = d3.format(".3%");
+			var x = d3.scale.ordinal()
+			.rangeRoundBands([0, width], .1);
+			var y = d3.scale.linear()
+			.range([height, 0]);
+			var xAxis = d3.svg.axis()
+			.scale(x)
+			.orient("bottom");
+			var yAxis = d3.svg.axis()
+			.scale(y)
+			.orient("left")
+			.tickFormat(formatPercent);
+			var tip = d3.tip()
+			.attr('class', 'd3-tip')
+			.offset([-10, 0])
+			.html(function(d) {
+				return "<strong>Date:</strong> <span>" + d.Date+ "</span></br>"+
+					"<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span></br>"+
+					"<strong>Fail:</strong> <span style='color:red'>" + d.Fail + "</span></br>"+
+					"<strong>Sucess:</strong> <span>" + d.Sucess + "</span></br>"+
+					"<strong>TreadReusage:</strong> <span>" + d.TreadReusage + "</span>";
+			});
+		function getRandomBar(data){
+				svg2 = d3.select("#"+DrawLocation).append("svg")
+				.attr("id","svg2Bar")
+				.attr("width", width + margin.left + margin.right)
+				.attr("height", height + margin.top + margin.bottom)
+				.append("g")
+				.attr("id","ShowBar")
+				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+				
+				svg2.call(tip);
+		//d3.tsv("data.tsv", type, function(error, data) {
+			  x.domain(data.map(function(d) { return d.Date; }));
+			  y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+
+			svg2.append("g")
+				  .attr("class", "x axis")
+				  .attr("transform", "translate(0," + height + ")")
+				  .call(xAxis)
+				  .selectAll("text").attr("transform", "rotate(67.5)").attr("style", "position:absolute");
+				
+			  svg2.append("g")
+				  .attr("class", "y axis")
+				  .call(yAxis)
+				.append("text")
+				  .attr("transform", "rotate(-90)")
+				  .attr("y", 6)
+				  .attr("dy", ".71em")
+				  .style("text-anchor", "end");
+
+			  svg2.selectAll(".bar")
+				  .data(data)
+				.enter().append("rect")
+				  .attr("class", "bar")
+				  .attr("x", function(d) { return x(d.Date); })
+				  .attr("width", x.rangeBand())
+				  .attr("y", function(d) { return y(d.frequency); })
+				  .attr("height", function(d) { return height - y(d.frequency); })
+				  .on('mouseover', tip.show)
+				  .on('mouseout', tip.hide);
+		}
+
+		function randomBar(){
+			return SummaryData.map(function(d){
+				return {Date:d.datetime, frequency:parseFloat(d.Fail)/(parseFloat(d.Success)+parseFloat(d.Fail)), 
+					Sucess:d.Success, Fail:d.Fail, TreadReusage: d.TreadReusage};});
+		}
+
+		function ViewRandomBar(){
+			getRandomBar(randomBar());
+		}
+
+		//var changeBar_timer = setInterval("ViewRandomBar()",timer);
+		ViewRandomBar();
+
+		function type(d) {
+		  d.frequency = +d.frequency;
+		  return d;
+		}
+	}
+</script>
+
+<!------------------ ChoosRange from reveal page -------------------->
+<script>
+	function getSummaryDataFromSelfChange(begin, end){
+		var myurl="LogAnaylsisSummary.html"+"?"+"begin="+begin+"&end="+end+"&lastPage=LogAnaylsisMain.html"+"&table="+global["SelectTableName"];
+		window.location.assign(myurl);
+	}
+</script>
+</html>

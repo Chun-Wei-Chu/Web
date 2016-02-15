@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="bower_components/BigVideo/css/bigvideo.css">
+</head>
+<body>
+    <div class="main" >
+        123
+    </div>
+    <div id="video" style="height:60%;width:100%;z-index:1">
+    </div>
+    <!-- BigVideo Dependencies -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="bower_components/jquery/jquery.min.js"><\/script>')</script>
+    <script src="bower_components/jquery-ui/ui/jquery-ui.js"></script>
+    <script src="bower_components/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+    <script src="http://vjs.zencdn.net/4.3/video.js"></script>
+    
+    <!-- BigVideo -->
+    <script src="bower_components/BigVideo/lib/bigvideo.js"></script>
+
+    <!-- Demo -->
+    <script>
+	    $(function() {
+            //var BV = new $.BigVideo({container:$("#video")});
+            var BV = new $.BigVideo();
+			BV.init();
+			BV.show('vids/nature720.mp4',{ambient:true});
+	    });
+    </script>
+</body>
+</html>

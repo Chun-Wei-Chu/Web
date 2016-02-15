@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<style>
+    #test_calendar table{
+        border:1px solid #000;
+    }
+    #test_calendar td{text-align:center;background-color:#fff;border:2px solid whitesmoke;}
+    #test_calendar td:hover{cursor:pointer;background-color:silver;}
+    #test_calendar tr:first-child td{        
+        cursor:none;background-color:silver;
+    }
+    #test_calendar table{
+        border-collapse:collapse;
+    }
+</style>
+<div id="test_calendar">
+	<div id="calendar"></div>
+
+<script id="calendar_temp" type="text/template">
+    <div id="ktcalendar" style="width:600px ;background-color:whitesmoke;">
+        <div style="overflow:hidden;">
+            <div  style="float:left;width:20%;">
+				<button id="premonth" type="button">&#12298;</button>
+			</div>
+			<div style="float:left;width:60%;overflow:hidden;" >
+                <div style="float:left;width:100%;text-align:center;" id="thisYear" ></div>
+			</div>
+			<div style="float:right;width:20%;text-align:right;">
+				<button id="nextmonth" type="button">&#12299;</button>
+			</div>
+		</div>
+	<div>
+    <table id="calendarbody" style="width:100%">
+        <tbody id="calendarbody_tbody">
+			<tr><td>日</td><td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td>六</td></tr>
+		</tbody>
+    </table></div></div></script><br />
+<script>
+
+    document.getElementById('calendar').innerHTML = document.getElementById('calendar_temp').textContent;
+    for (var i = 0; i < 6; i++) {
+        var tr = document.createElement('tr');
+        document.getElementById('calendarbody_tbody').appendChild(tr);
+        for (var j = 0; j < 7; j++) {
+            var td = document.createElement('td');
+            tr.appendChild(td);
+        }
+    }   
+    var thisYear = (new Date()).getFullYear();
+    var thisMonth = (new Date()).getMonth() ;
+
+
+ setCalendar();
+
+    function setCalendar() { 
+
+        var firstDay_week = (new Date(thisYear, thisMonth, 1)).getDay();
+        var lastDay = (new Date(thisYear, thisMonth + 1, 0)).getDate();
+        document.getElementById('thisYear').textContent = (thisYear + "-" + (thisMonth+1));
+
+        var trs = document.querySelectorAll('#calendarbody tr');
+        var day = 0;
+        var days = [];
+        for (w = firstDay_week ; w < (lastDay + firstDay_week) ; w++) {
+            day++;
+            days[w] = day;
+        }
+        var week_day_index = 0;
+        for (i = 0; i < trs.length; i++) {
+            var calendar_tds = trs[i].querySelectorAll('td');
+            if (i > 0) {
+                for (j = 0; j < calendar_tds.length; j++) {                    
+                    calendar_tds[j].textContent = days[week_day_index] == undefined ? '' : days[week_day_index] ;
+                    calendar_tds[j].dataset.yymmdd = thisYear + '/' + (thisMonth + 1)+ '/' + days[week_day_index]
+                    calendar_tds[j].onclick = function () {
+                        getSQLiteDataByDate(this.dataset.yymmdd);                     
+                    };
+                    week_day_index++;                  
+                }
+            }
+            if (i > 4 ) {
+                if (typeof (calendar_tds[0].textContent) == 'undefined' ||
+                    calendar_tds[0].textContent == null ||
+                    calendar_tds[0].textContent.length == 0) {
+                    trs[i].style.display = 'none'; 
+                } else { 
+                    trs[i].style.display = '';  
+                }
+            } 
+        }
+    }
+
+    document.getElementById('premonth').onclick = function () {    
+
+        thisMonth--;
+        if (thisMonth < 0) {
+            thisMonth = 11;
+            thisYear -= 1;
+        } 
+        setCalendar(); 
+    }
+    document.getElementById('nextmonth').onclick = function () {   
+
+        thisMonth++;
+        if (thisMonth > 11) {
+            thisMonth = 0;
+            thisYear += 1;
+        }
+        setCalendar();
+    }
+	
+	/*當按特定日期時執行getSQLiteDataByDate function 傳入值為選擇日期ex:2015-11-27*/
+	function getSQLiteDataByDate(date){
+		
+	}
+
+
+</script><br />
+
+</body>
+</html>

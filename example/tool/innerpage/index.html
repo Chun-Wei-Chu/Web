@@ -1,0 +1,80 @@
+<html>
+<head>
+<body>
+<style>
+/* active樣式是給目前所選取頁籤用的 */
+.active {
+	border: 1px solid #7D7D7D;
+	border-bottom: none;
+	width:	70;
+	cursor:pointer;
+}
+/* inactive樣式是給未選取頁籤用的 */
+.inactive {
+	border: none;
+	border-bottom: 1px solid #7D7D7D;
+	width:	70;
+	cursor:pointer;
+}
+/* layer樣式是給DIV用的 */
+.layer {
+	border: 1px solid #7D7D7D;
+	border-top: none;
+	width:	400;
+	height:	200;
+}
+</style>
+<table width="400" border="0" cellspacing="0" cellpadding="0">
+	<tr align="center">
+		<td class="active" id="cell1" style="background-color:#FFFF99;" onclick="showLayer(this,'d1',0);">標籤1</td>
+		<td class="inactive" id="cell2" onclick="showLayer(this,'d2',1);">標籤2</td>
+		<td class="inactive" id="cell3" onclick="showLayer(this,'d3',2);">標籤3</td>
+		<td class="inactive" id="cell4" onclick="showLayer(this,'d4',3)">標籤4</td>
+                <td style="border-bottom:1px solid #7D7D7D;">&nbsp;</td>
+	</tr>
+</table>
+<div id="d1" class="layer" style="display:block;background-color:#FFFF99;">標籤1的內容</div>
+<div id="d2" class="layer" style="display:none;">標籤2的內容</div>
+<div id="d3" class="layer" style="display:none;">標籤3的內容</div>
+<div id="d4" class="layer" style="display:none;">標籤4的內容</div>
+
+<script type="text/javascript">
+	//用來紀錄作用中頁籤的ID 預設是第一個頁籤
+	var currentLayer = "cell1";
+	//用來紀錄作用中頁籤的頁面ID 預設是第一個頁面
+	var currentDiv = "d1";
+	//用來紀錄預設的顏色
+	var defaultColor = "#FFFFFF";
+	//用來紀錄各頁籤所要用的顏色值
+	var colorArray = new Array("#FFFF99","#CCFF00","#FFCC00","#00CCCC");
+	//showLayer()函式，參數為觸發該函式的元素、所屬頁面ID及顏色索引
+	function showLayer(obj,div,cIndex){
+		//若目前的currentLayer不等於obj.id 表示要換頁面
+		if(currentLayer!=obj.id) {
+			//先改變上一個頁籤及頁面的樣式
+			showIt(currentLayer,currentDiv,cIndex,false);
+			//重設currentLayer及currentDiv的值
+			currentLayer = obj.id;
+			currentDiv = div;
+			//最後再改變目前頁籤及頁面的樣式
+			showIt(currentLayer,currentDiv,cIndex,true);
+		}
+	}
+	//showIt()函式，參數為currentLayer、currentDiv、colorArray的索引及模式
+	//mode為true時 則表示目前作用中 所以要顯示
+	//mode為false時 則表示目前非作用中 所以要隱藏
+	function showIt(o,d,cIndex,mode){
+		var obj = document.getElementById(o);
+		var div = document.getElementById(d);
+		//改變className則表示改變該元素所用的class
+		obj.className = mode?"active":"inactive";
+		div.style.display = mode?"block":"none";
+		//改變頁籤及頁面的背景顏色
+		obj.style.backgroundColor = mode?colorArray[cIndex]:defaultColor;
+		div.style.backgroundColor = mode?colorArray[cIndex]:defaultColor;
+		//可以直接寫div.style.backgroundColor = colorArray[cIndex]
+	}
+</script>
+</body>
+</head>
+</html>

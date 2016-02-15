@@ -1,0 +1,516 @@
+﻿<!DOCTYPE HTML>
+<html>
+	<head>
+		<style>
+			html,body,table{
+				height: 100%;
+			}
+			
+			div::-webkit-scrollbar { 
+				display: none; 
+			}
+	
+		</style>
+		<!-- 最新編譯和最佳化的 CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+	</head>
+	
+	<body style="font-family:cursive;">
+		<table  border="0" style="width:100%;height:98%;text-align: center;">
+			<tr >
+				<td style="width:60%;height:100%;">
+					<div style="width:98%;overflow:scroll;overflow-x:hidden;height:100%;">
+					
+						<div class="panel panel-default">
+						  <div class="panel-heading">查詢與查詢結果<button id="Ex1" style="float:right;">show code</button></div>
+						  <div class="panel-body">
+							<div style="left:40%;position:relative;">
+								<p style="text-align:left;">選取的物件 : <button onclick="Ex1_1();" class="btn-default">show</button></p><br/>
+								<p style="text-align:left;">選取的內容物 : <button  onclick="Ex1_2();" class="btn-default">show</button></p><br/>
+								<p style="text-align:left;">選取的物件相關資訊 : <button  onclick="Ex1_3();" class="btn-default">show</button></p><br/>
+							</div>
+						  </div>
+						</div>
+															
+						<br/>
+						
+						<div class="panel panel-default">
+							 <div class="panel-heading">onclick and addEventListener <button id="Ex2" style="float:right;">show code</button></div>
+							 <div class="panel-body">
+								<button onclick="Ex2_btnEach();">change p (each)</button>
+								<div id="Ex2_body">
+									<p>p: test1 </p>
+									<p>p: test2 </p>
+									<p>p: test3 </p>
+								</div >
+								<button onclick="Ex2_btnMap();">get p's value (map)</button>
+								<p id="Ex2_map_p">Values : </p>
+								
+							 </div>
+						</div>
+						
+						<br/>
+						
+						<div class="panel panel-default">
+							 <div class="panel-heading">change attr class<button id="Ex3" style="float:right;">show code</button></div>
+							 <div class="panel-body">
+								
+								<button onclick="Ex3_btn();">click me</button>
+								<div id="Ex3_body" class="panel panel-warning">
+									 <div class="panel-heading">header</div>
+									 <div class="panel-body"></div>
+								</div>
+								
+							 </div>
+						</div>
+
+						<br/>
+						
+						<div class="panel panel-default">
+							 <div class="panel-heading">複製、包覆、刪除元素<button id="Ex4" style="float:right;">show code</button></div>
+							 <div class="panel-body">
+								 <div>
+									<h2  id="Ex4_wrap_p" style="display: inline;">wrap me thanks</h2> 
+									<button onclick="Ex4_wrap_btn()"  style="display: inline;">wrap</button>
+									<button onclick="Ex4_unwrap_btn();">unwrap</button>
+									<button onclick="Ex4_clone_btn()">clone p</button>
+								</div>	
+								<div id="Ex4_body"></div>
+							 </div>
+						</div>			
+
+						<br/>
+						
+						<div class="panel panel-default">
+							 <div class="panel-heading"> 動態新增html <button id="Ex5" style="float:right;">show code</button></div>
+							 <div class="panel-body">
+								<textarea id="Ex5_code_body" style="width:80%;font-size:20px; display:inline;" rows="10"></textarea>
+								<button onclick="Ex5_showResult();">showResult</button>
+								
+								<br/><br/><br/>
+								
+								<div class="panel panel-success">
+									<div class="panel-heading">show Result</div>
+									 <div id="Ex5_show_body" class="panel-body">
+										
+									 </div>
+								 </div>	
+							 </div>
+						</div>
+						
+						<br/>
+						
+						<div class="panel panel-default">
+							 <div class="panel-heading"> trigger <button id="Ex6" style="float:right;">show code</button></div>
+							 <div class="panel-body">
+								<select onChange="function_Ex6(this);">
+								<option value="#">請選擇</option>
+								<option value="#Ex1">Ex1</option>
+								<option value="#Ex2">Ex2</option>
+								<option value="#Ex3">Ex3</option>
+								<option value="#Ex4">Ex4</option>
+								<option value="#Ex5">Ex5</option>
+								</select>
+							 </div>
+						</div>									
+						
+						<br/>
+						
+						<div class="panel panel-default">
+							 <div class="panel-heading"> delegate <button id="Ex7" style="float:right;">show code</button></div>
+							 <div class="panel-body">
+								<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+								<table id="Ex7_table"  border="1"  style="position: relative;margin:0 auto;">
+								</table>
+							 </div>
+						</div>	
+						
+						<br/>
+						
+						<div class="panel panel-default">
+							 <div class="panel-heading"> animate <button id="Ex8" style="float:right;">show code</button></div>
+							 <div class="panel-body">
+							 	<button id="Ex8_btn1">Animate</button>
+								<button id="Ex8_btn2">Reset</button>
+								<br/>
+								<div style="white-space:pre;font-size:30px;">=                  =</div>
+								<div id="Ex8_box" style="background:#98bf21;height:100px;width:100px;margin:0 auto;">
+								</div>
+							 </div>
+						</div>		
+
+						<br/>
+						
+						<div class="panel panel-default">
+							 <div class="panel-heading"> Ajax <button id="Ex9" style="float:right;">show code</button></div>
+							 <div class="panel-body">
+								<div id="Ex9_load"></div>
+								<div id="Ex9_getScript"></div>								
+							 </div>
+						</div>		
+						
+						<br/>
+						
+						<div class="panel panel-default">
+							 <div class="panel-heading">onclick and addEventListener <button id="Ex0" style="float:right;">show code</button></div>
+							 <div class="panel-body">
+								
+							 </div>
+						</div>						
+						
+					</div>
+				</td>
+				
+		
+				<td style="width:40%;height:100%;">
+					<div id="console" class="panel panel-default" style="width:100%;height:100%;overflow:scroll;overflow-x:hidden;">
+					  <div class="panel-heading">console<button onclick="requireFullscreen();" style="float:right;">fullScreen</button><button id="btn_ClearConsole" style="float:right;">clear</button></div>
+					  <div id="console_line" class="panel-body" style="text-align: left;white-space: pre-wrap;">
+						456
+					  </div>
+					</div>
+				
+				</td>
+			</tr>
+		</table>
+
+		<script>
+			/*全螢幕*/
+			function launchIntoFullscreen(element) {
+			  if(element.requestFullscreen) {
+				element.requestFullscreen();
+			  } else if(element.mozRequestFullScreen) {
+				element.mozRequestFullScreen();
+			  } else if(element.webkitRequestFullscreen) {
+				element.webkitRequestFullscreen();
+			  } else if(element.msRequestFullscreen) {
+				element.msRequestFullscreen();
+			  }
+			}
+			
+			function requireFullscreen(){
+				launchIntoFullscreen(document.getElementById("console"));
+			}
+									
+			/*懶得整理可以把檔案內容全部讀出*/
+			function getTextFromSource(source){
+				$.get(source, function(response) { $("#console_line").text(response); });
+			}	
+			
+			$("#btn_ClearConsole").click(function(){
+				$("#console_line").empty();
+			});
+			
+			/*將xml轉成String*/
+			function xmlToString(xmlData) { 
+				var xmlString;
+				//IE
+				if (window.ActiveXObject){
+					xmlString = xmlData.xml;
+				}
+				// code for Mozilla, Firefox, Opera, etc.
+				else{
+					xmlString = (new XMLSerializer()).serializeToString(xmlData);
+				}
+				return xmlString;
+			}  
+			
+			/************************************************************************/
+			var bodyscript = $("script", document.head);//選取head中的script
+			function Ex1_1(){$("#console_line").text(bodyscript.selector); }//選取的物件
+			function Ex1_2(){$("#console_line").text(xmlToString(bodyscript.context)); }//head中的所有element
+			function Ex1_3(){$("#console_line").text(bodyscript.jquery); }//script中jquery的相關資訊
+			
+			$("#Ex1").click(function(){
+				$("#console_line").text(
+				'JS:\n'
+				+'	var bodyscript = $("script", document.head);//選取head中的script\n'
+				+'	function Ex1_1(){$("#console_line").text(bodyscript.selector); }\n'
+				+'	function Ex1_2(){$("#console_line").text(xmlToString(bodyscript.context)); }\n'
+				+'	function Ex1_3(){$("#console_line").text(bodyscript.jquery); }\n'
+				);
+			});
+
+			/************************************************************************/		
+			function Ex2_btnEach(){
+				$("#Ex2_body p").each(
+					function(e){
+						$(this).text($(this).text()+" change." + e);
+					}
+				);
+			}
+			
+			function Ex2_btnMap(){
+				    $("#Ex2_map_p").append( $("#Ex2_body p").map(function(){
+					  return $(this).text();
+					}).get().join(", ") );
+			}
+			
+			$("#Ex2").click(function(){
+				$("#console_line").text(
+				'Html:\n'
+				+'	<button onclick="Ex2_btn();">change p (each)</button>\n'
+				+'	<div id="Ex2_body">\n'
+				+'		<p>p: test1 </p>\n'
+				+'		<p>p: test2 </p>\n'
+				+'		<p>p: test3 </p>\n'
+				+'	</div>\n'
+				+'	<button onclick="Ex2_btnMap();">get p\'s value (map)</button>\n'
+				+'	<p id="Ex2_map_p">Values : </p>\n'
+				+'\nJS:\n'
+				+'	function Ex2_btnEach(){\n'
+				+'		$("#Ex2_body p").each(\n'
+				+'			function(e){\n'
+				+'				$(this).text($(this).text()+" change." + e);\n'
+				+'			}\n'
+				+'		);\n'
+				+'	}\n\n'
+				+'	function Ex2_btnMap(){\n'
+				+'		$("#Ex2_map_p").append( $("#Ex2_body p").map(function(){\n'
+				+'		  return $(this).text();\n'
+				+'		}).get().join(", ") );\n'
+				+'	}\n'
+				);
+			});
+			
+			/************************************************************************/
+			var Ex3_num=0;
+			function Ex3_btn(){
+				if(Ex3_num==0){
+					$("#Ex3_body").attr("class", "panel panel-success");
+				}
+				else{
+					$("#Ex3_body").attr("class", "panel panel-warning");
+				}
+				$("#console_line").text($("#Ex3_body").attr("class"));
+				Ex3_num=Ex3_num^1;
+			}
+			
+			$("#Ex3").click(function(){
+				$("#console_line").text(
+				'Html:\n'
+				+'	<button onclick="Ex3_btn();">click me</button>\n'
+				+'	<div id="Ex3_body" class="panel panel-warning">\n'
+				+'		<div class="panel-heading">header</div>\n'
+				+'		<div class="panel-body"></div>\n'
+				+'	</div>\n'
+				+'\nJS:\n'
+				+'	var Ex3_num=0;\n'
+				+'	function Ex3_btn(){\n'
+				+'		if(Ex3_num==0){\n'
+				+'			$("#Ex3_body").attr("class", "panel panel-success");\n'
+				+'		}\n'
+				+'		else{\n'
+				+'			$("#Ex3_body").attr("class", "panel panel-warning");\n'
+				+'		}\n'
+				+'		$("#console_line").text($("#Ex3_body").attr("class"));\n'
+				+'		Ex3_num=Ex3_num^1;\n'
+				+'	}\n'
+				);
+			});
+			
+			/************************************************************************/		
+			var wrapTimes=0;
+			function Ex4_wrap_btn(){
+				wrapTimes++;
+				$("#Ex4_wrap_p").parent().wrap('<div style="background:#999"></div>');
+			}
+			
+			function Ex4_unwrap_btn(){	
+				if(wrapTimes > 0){
+					wrapTimes--;
+					$("#Ex4_wrap_p").parent().unwrap();
+				}
+			}
+			
+			function Ex4_clone_btn(){
+				$("#Ex4_body").append($("#Ex4_wrap_p").clone().text($("#Ex4_wrap_p").text() + "'s clone!!"));
+			}
+			$("#Ex4").trigger('click');
+			$("#Ex4").click(function(){
+				$("#console_line").text(
+				'Html:\n'
+				+'	<div>\n'
+				+'		<h2  id="Ex4_wrap_p" style="display: inline;">wrap me thanks</h2> \n'
+				+'		<button onclick="Ex4_wrap_btn()"  style="display: inline;">wrap</button>\n'
+				+'		<button onclick="Ex4_unwrap_btn();">unwrap</button>\n'
+				+'		<button onclick="Ex4_clone_btn()">clone p</button>\n'
+				+'	</div>	\n'
+				+'	<div id="Ex4_body"></div>\n'
+				+'\nJS:\n'
+				+'	var wrapTimes=0;\n'
+				+'	function Ex4_wrap_btn(){\n'
+				+'		wrapTimes++;\n'
+				+'		$("#Ex4_wrap_p").parent().wrap(\'<div style="background:#999"></div>\');\n'
+				+'	}\n'					
+				+'	function Ex4_unwrap_btn(){	\n'
+				+'		if(wrapTimes > 0){\n'
+				+'			wrapTimes--;\n'
+				+'			$("#Ex4_wrap_p").parent().unwrap();\n'
+				+'		}\n'
+				+'	}\n'					
+				+'	function Ex4_clone_btn(){\n'
+				+'		$("#Ex4_body").append($("#Ex4_wrap_p").clone().text($("#Ex4_wrap_p").text() + "\'s clone!!"));\n'
+				
+				+'	}\n'
+				);
+			});
+			
+			/************************************************************************/		
+			$("#Ex5_code_body").val(
+				'<script>\n'
+				+'function tmp(){\n'
+				+'$("#console_line").text($("#console_line").text()+"hello world");\n'
+				+'}\n'
+				+'<\/script>\n'
+				+'<button onclick="tmp();">click me</button>'
+			);
+			
+			function Ex5_showResult(){
+				$("#Ex5_show_body").html($("#Ex5_code_body").val());
+			}
+			
+			$("#Ex5").click(function(){
+				$("#console_line").text(
+				'Html:\n'
+				+'	<textarea id="Ex5_code_body" style="width:80%;font-size:20px; display:inline;" rows="10"></textarea>\n'
+				+'	<button onclick="Ex5_showResult();">showResult</button>\n'
+					
+				+'	<br/><br/><br/>\n'
+					
+				+'	<div class="panel panel-success">\n'
+				+'		<div class="panel-heading">show Result</div>\n'
+				+'		 <div id="Ex5_show_body" class="panel-body">\n'
+							
+				+'		 </div>\n'
+				+'	 </div>\n'
+				+'\nJS:\n'
+				+'function Ex5_showResult(){$("#Ex5_show_body").html($("#Ex5_code_body").val());}\n'
+				);
+			});
+
+			/************************************************************************/				
+			function function_Ex6(tmp){
+				$(tmp.options[tmp.selectedIndex].value).trigger("click");
+			}
+			
+			$("#Ex6").click(function(){
+				$("#console_line").text(
+				'Html:\n'
+				+'	<select onChange="function_Ex6(this);">\n'
+				+'	<option value="#">請選擇</option>\n'
+				+'	<option value="#Ex1">Ex1</option>\n'
+				+'	<option value="#Ex2">Ex2</option>\n'
+				+'	<option value="#Ex3">Ex3</option>\n'
+				+'	<option value="#Ex4">Ex4</option>\n'
+				+'	<option value="#Ex5">Ex5</option>\n'
+				+'	</select>\n'
+				+'\nJS:\n'
+				+'	function function_Ex6(tmp){$(tmp.options[tmp.selectedIndex].value).trigger("click");}\n'
+				);
+			});
+					
+			/************************************************************************/	
+			var table_body="";
+			for(var i=0;i<40;i++){
+				table_body+="<tr>";
+				for(var j=0;j<40;j++)
+					table_body+="<td style=\"height:10px;width:10px;background:#aaa\"></td>";
+				table_body+="</tr>";
+			}
+			$("#Ex7_table").html(table_body);
+			$("#Ex7_table").delegate("td", "hover", function () {  
+				$(this).animate({opacity: 0.25}, 300, function () {  
+					$(this).animate({opacity: 1}, 300);  
+				});  
+			});
+			
+			/*js 對於script單字也太敏感...*/
+			$("#Ex7").click(function(){
+				$("#console_line").text(
+				'Html:\n'
+				+'	<table id="Ex7_table"  border="1"  style="position: relative;margin:0 auto;"></table>\n'
+				+'\nJS:\n'
+				+'	var table_body="";\n'
+				+'	for(var i=0;i<40;i++){\n'
+				+'		table_body+="<tr>";\n'
+				+'		for(var j=0;j<40;j++)\n'
+				+'			table_body+="<td style=\"height:10px;width:10px;background:#aaa\"></td>";\n'
+				+'		table_body+="</tr>";\n'
+				+'	}\n'
+				+'	$("#Ex7_table").html(table_body);\n'
+				+'	$("#Ex7_table").delegate("td", "hover", function () {  \n'
+				+'		$(this).animate({opacity: 0.25}, 300, function () {  \n'
+				+'			$(this).animate({opacity: 1}, 300);  \n'
+				+'		});\n'  
+				+'	});\n'
+				);
+			});
+			
+			/************************************************************************/	
+			$("#Ex8_btn1").click(function(){
+				$("#Ex8_box").animate({height:"300px"});
+			});
+			$("#Ex8_btn2").click(function(){
+				$("#Ex8_box").animate({height:"100px"});
+			});			
+			
+			$("#Ex8").click(function(){
+				$("#console_line").text(
+				'Html:\n'
+				+'	<div style="white-space:pre;font-size:30px;">=                  =</div>\n'
+				+'	<div id="Ex8_box" style="background:#98bf21;height:100px;width:100px;margin:0 auto;">\n'
+				+'	</div>\n'
+				+'	<button id="Ex8_btn1">Animate</button>\n'
+				+'	<button id="Ex8_btn2">Reset</button>);\n'
+				+'\nJS:\n'
+				+'	$("#Ex8_btn1").click(function(){\n'
+				+'		$("#Ex8_box").animate({height:"300px"});\n'
+				+'	});\n'
+				+'	$("#Ex8_btn2").click(function(){\n'
+				+'		$("#Ex8_box").animate({height:"100px"});\n'
+				+'	});\n'	
+				);
+			});
+			
+			
+			/************************************************************************/
+			$("#Ex9_load").load("load.html #loadTest");
+			
+			$.getScript("getScript.js", function(){
+				$("#Ex9_getScript").text(getScript("hello world"));
+			});
+			
+			$("#Ex9").click(function(){
+				$("#console_line").text(
+				'Html:\n'
+				+'	 <div class="panel-body">\n'
+				+'		<div id="Ex9_load"></div>\n'
+				+'		<div id="Ex9_getScript"></div>\n'								
+				+'	 </div>\n'
+				+'\nJS:\n'
+				+'	$("#Ex9_load").load("load.html #loadTest");\n'
+				+'	$.getScript("getScript.js", function(){\n'
+				+'		$("#Ex9_getScript").text(getScript("hello world"));\n'
+				+'	});\n'
+				+'\nload.html:\n'
+				+'	<div id="loadTest"> 我來自load.html中的 # loadTest</div>\n'
+				+'	<div id="load"> 我來自load.html中的 # load</div>\n'
+				+'\ngetScript.js:\n'
+				+'	function getScript(tmp){\n'
+				+'		return "Echo from getScript.js : " +tmp;\n'
+				+'	}\n'
+				);
+			});
+			
+			/************************************************************************/		
+			$("#Ex0").click(function(){
+				$("#console_line").text();
+			});
+			
+		</script>
+		
+	</body>
+</html>

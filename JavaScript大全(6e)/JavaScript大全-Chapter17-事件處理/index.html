@@ -1,0 +1,377 @@
+﻿<!DOCTYPE HTML>
+<html >
+	<head>
+		<style>
+			html,body,table{
+				height: 100%;
+			}
+			#div1 {width:350px;height:90px;padding:10px;border:1px solid #aaaaaa;margin:0 auto;}
+			
+			div::-webkit-scrollbar { 
+				display: none; 
+			}
+		</style>
+		<!-- 最新編譯和最佳化的 CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	</head>
+	
+	<body style="font-family:cursive;">
+		<table  border="0" style="width:100%;height:98%;text-align: center;">
+			<tr >
+				<td style="width:60%;height:100%;">
+					<div style="width:98%;overflow:scroll;overflow-x:hidden;height:100%;">
+					
+						<div class="panel panel-default">
+						  <div class="panel-heading">drag and drop<button id="Ex1" style="float:right;">show code</button></div>
+						  <div class="panel-body">
+							<p>Drag the W3Schools image into the rectangle:</p>
+
+							<div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+							<br>
+							<img id="drag1" src="http://www.designbyfire.com/images/img_w3c_01.gif" draggable="true" ondragstart="drag(event)" width="336" height="69">
+						  </div>
+						</div>
+						
+						<br/>
+						
+						<div class="panel panel-default">
+							 <div class="panel-heading">onclick and addEventListener <button id="Ex2" style="float:right;">show code</button></div>
+							 <div class="panel-body">
+								<button id ="EventListener">EventListener</button>
+							 </div>
+						</div>
+						
+						<br/>
+						
+						<div class="panel panel-default">
+							 <div class="panel-heading">mouse event<button id="Ex3" style="float:right;">show code</button></div>
+							 <div class="panel-body">
+								<p id="myP" ondblclick="dblclick()" onmousedown="mouseDown()" onmouseup="mouseUp()">
+									dbclick, mouseDown, and moseUp
+								</p>
+								<br/><br/>
+								<img onmouseover="mouseover(this)" onmouseout="mouseout(this)"src="http://www.sysjust.com.tw/images/home-about2.png"/>
+							 </div>
+						</div>
+						
+						<br/>
+						
+						<div class="panel panel-default">
+							 <div class="panel-heading">按鍵事件<button id="Ex4" style="float:right;">show code</button></div>
+							 <div class="panel-body">
+								<input id="keyEvent" placeholder="Enter鍵"/>
+							 </div>
+						</div>
+						
+						<br/>
+						
+						<div class="panel panel-default">
+							 <div class="panel-heading">video event<button id="Ex6" style="float:right;">show code</button></div>
+							 <div class="panel-body">
+								  <button onclick="playPause()">Play/Pause</button> 
+								  <button onclick="makeBig()">Big</button>
+								  <button onclick="makeSmall()">Small</button>
+								  <button onclick="makeNormal()">Normal</button>
+								  <br><br>
+								  <video id="video1" width="420">
+									<source src="http://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+									<source src="http://www.w3schools.com/html/mov_bbb.ogg" type="video/ogg">
+									Your browser does not support HTML5 video.
+								  </video><br/><br/>
+								  <a href="example_video.html">更多</a><br/>來源:http://thenewcode.com/samples/polina.html<br/>
+							 </div>
+						</div>
+						
+						<br/>
+						
+						<div class="panel panel-default">
+							 <div class="panel-heading"> onTouch <button id="Ex7" style="float:right;">show code</button></div>
+							 <div class="panel-body">
+								<button id="touchListener" ontouchstart="touchstart();" ontouchend="touchend();">long-time press</button>
+							 </div>
+						</div>
+						
+												
+						<br/>
+						
+						<div class="panel panel-default">
+							 <div class="panel-heading">透過mouse event達作drag-drop效果 <button id="Ex5" style="float:right;">show code</button></div>
+							 <div class="panel-body">
+								<a href="example.html">點我</a><br/>
+								<div>
+									<span>功能: 可自由移動iframe, 動態新增iframe, 判斷被關注iframe, 半透明酷炫重疊效果</span><br/><br/>
+									<span>只介紹: 滑鼠事件</span>
+								</div>
+							 </div>
+						</div>
+						
+						<br/>
+						
+						<div class="panel panel-default">
+							 <div class="panel-heading">onclick and addEventListener <button id="Ex0" style="float:right;">show code</button></div>
+							 <div class="panel-body">
+								
+							 </div>
+						</div>
+						
+					</div>
+				</td>
+				
+				<td style="width:40%;height:100%;">
+					<div id="console" class="panel panel-default" style="width:100%;height:100%;overflow:scroll;overflow-x:hidden;">
+					  <div class="panel-heading">console<button onclick="requireFullscreen();" style="float:right;">fullScreen</button><button id="btn_ClearConsole" style="float:right;">clear</button></div>
+					  <div id="console_line" class="panel-body" style="text-align: left;white-space: pre-wrap;">
+						456
+					  </div>
+					</div>
+				
+				</td>
+			</tr>
+		</table>
+
+		<script>
+			function launchIntoFullscreen(element) {
+			  if(element.requestFullscreen) {
+				element.requestFullscreen();
+			  } else if(element.mozRequestFullScreen) {
+				element.mozRequestFullScreen();
+			  } else if(element.webkitRequestFullscreen) {
+				element.webkitRequestFullscreen();
+			  } else if(element.msRequestFullscreen) {
+				element.msRequestFullscreen();
+			  }
+			}
+			function requireFullscreen(){
+				launchIntoFullscreen(document.getElementById("console"));
+			}
+		
+			$("#btn_ClearConsole").click(function(){
+				$("#console_line").empty();
+			});
+			
+			/****************************************************/
+			function allowDrop(ev) {
+				ev.preventDefault();
+			}
+
+			function drag(ev) {
+				ev.dataTransfer.setData("text", ev.target.id);
+			}
+
+			function drop(ev) {
+				ev.preventDefault();
+				var data = ev.dataTransfer.getData("text");
+				ev.target.appendChild(document.getElementById(data));
+			}
+			
+			$("#Ex1").click(function(){
+				$("#console_line").empty();
+				$("#console_line").text('CSS:\n'
+				+'	#div1 {width:350px;height:90px;padding:10px;border:1px solid #aaaaaa;margin:0 auto;}\n'
+				+'\nHtml:\n'
+				+'	<div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>\n'
+				+'	<img id="drag1" src="http://www.designbyfire.com/images/img_w3c_01.gif" draggable="true" ondragstart="drag(event)" width="336" height="69">\n'
+				+'\nJS:\n'
+				+'	function allowDrop(ev) {\n'
+				+'		ev.preventDefault();\n'
+				+'	}\n'
+				+'	function drag(ev) {\n'
+				+'		ev.dataTransfer.setData("text", ev.target.id);\n'
+				+'	}\n'
+				+'	function drop(ev) {\n'
+				+'		ev.preventDefault();\n'
+				+'		var data = ev.dataTransfer.getData("text");\n'
+				+'		ev.target.appendChild(document.getElementById(data));\n'
+				+'	}\n'
+				);
+			});
+			
+			/*****************************************************/    
+			var b = document.getElementById("EventListener");
+			b.onclick=function(){alert("click me call by onclick");};
+			b.addEventListener("click", function(){alert("click me call by EventListener");});
+			
+			$("#Ex2").click(function(){
+				$("#console_line").empty();
+				$("#console_line").text('Html:\n	<button id ="EventListener">EventListener</button>\n'
+				+'\nJS:\n'
+				+'	var b = document.getElementById("EventListener");\n'
+				+'	b.onclick=function(){alert("click me call by onclick");};\n'
+				+'	b.addEventListener("click", function(){alert("click me call by EventListener");});\n'
+				);
+			});
+			
+			/********************************************************/
+			function mouseDown() {
+				document.getElementById("myP").style.color = "red";
+			}
+
+			function mouseUp() {
+				document.getElementById("myP").style.color = "green";
+			}
+			function dblclick(){
+				alert("The paragraph was double-clicked.");
+			};
+			function mouseout(tmp){
+				tmp.src="http://www.sysjust.com.tw/images/home-about2.png";
+			}
+			function mouseover(tmp){
+				tmp.src="http://www.sysjust.com.tw/images/home-about4-o.png";
+			}
+			$("#Ex3").click(function(){
+				$("#console_line").empty();
+				$("#console_line").text('Html:\n'
+				+'	<p id="myP" ondblclick="dblclick()" onmousedown="mouseDown()" onmouseup="mouseUp()">\n'
+				+'	dbclick, mouseDown, and moseUp\n'
+				+'	</p>\n'
+				+'	<img onmouseover="mouseover(this)" onmouseout="mouseout(this)"src="http://www.sysjust.com.tw/images/home-about2.png"/>\n'
+				+'\nJS:\n'
+				+'	function mouseDown() {\n'
+				+'		document.getElementById("myP").style.color = "red";\n'
+				+'	}\n'
+				+'	function mouseUp() {\n'
+				+'		document.getElementById("myP").style.color = "green";\n'
+				+'	}\n'
+				+'	function dblclick(){\n'
+				+'		alert("The paragraph was double-clicked.");\n'
+				+'	};\n'
+				+'	function mouseout(tmp){\n'
+				+'		tmp.src="http://www.sysjust.com.tw/images/home-about2.png";\n'
+				+'	}\n'
+				+'	function mouseover(tmp){\n'
+				+'		tmp.src="http://www.sysjust.com.tw/images/home-about4-o.png";\n'
+				+'	}\n'
+				);
+			});
+		
+			/********************************************************/
+			$('#keyEvent').keydown(function(event){
+				if( event.which == 13 ) {
+					alert("按下Enter了");
+				}
+			});
+
+			
+			$("#Ex4").click(function(){
+				$("#console_line").empty();
+				$("#console_line").text('Html:\n'
+				+'	<input id="keyEvent" placeholder="Enter鍵"/>\n'
+				+'\nJS:\n'
+				+'	$("#keyEvent").keydown(function(event){\n'
+				+'		if( event.which == 13 ) {\n'
+				+'			alert("按下Enter了");\n'
+				+'		}\n'
+				+'	});\n'
+				);
+			});
+
+			/********************************************************/
+			$("#Ex5").click(function(){
+				$("#console_line").empty();
+				$.get("example.txt", function(response) { $("#console_line").text(response); });
+			});
+
+			/*******************************************************/
+			var myVideo = document.getElementById("video1"); 
+
+			function playPause() { 
+				if (myVideo.paused) 
+					myVideo.play(); 
+				else 
+					myVideo.pause(); 
+			} 
+
+			function makeBig() { 
+				myVideo.width = 560; 
+			} 
+
+			function makeSmall() { 
+				myVideo.width = 320; 
+			} 
+
+			function makeNormal() { 
+				myVideo.width = 420; 
+			} 
+			
+			$("#Ex6").click(function(){
+				$("#console_line").empty();
+				$("#console_line").text(
+				'Html:\n'
+				+'	<button onclick="playPause()">Play/Pause</button> \n'
+				+'	<button onclick="makeBig()">Big</button>\n'
+				+'	<button onclick="makeSmall()">Small</button>\n'
+				+'	<button onclick="makeNormal()">Normal</button>\n'
+				+'	<br><br>\n'
+				+'	<video id="video1" width="420">\n'
+				+'		<source src="http://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">\n'
+				+'		<source src="http://www.w3schools.com/html/mov_bbb.ogg" type="video/ogg">\n'
+				+'		Your browser does not support HTML5 video.\n'
+				+'	</video>\n'
+				+'\nJS:\n'
+				+'	var myVideo = document.getElementById("video1"); \n'
+				+'	function playPause() { \n'
+				+'		if (myVideo.paused) \n'
+				+'			myVideo.play(); \n'
+				+'		else \n'
+				+'			myVideo.pause(); \n'
+				+'	} \n'
+				+'	function makeBig() { \n'
+				+'		myVideo.width = 560; \n'
+				+'	} \n'
+				+'	function makeSmall() { \n'
+				+'		myVideo.width = 320; \n'
+				+'	} \n'
+				+'	function makeNormal() { \n'
+				+'		myVideo.width = 420; \n'
+				+'	}\n' 
+				);
+			});
+
+			/*******************************************************/
+			var onlongtouch; 
+			var timer;
+			var touchduration = 2000; //length of time we want the user to touch before we do something
+
+			function touchstart() {
+				timer = setTimeout(onlongtouch, touchduration); 
+			}
+
+			function touchend() {
+
+				//stops short touches from firing the event
+				if (timer)
+					clearTimeout(timer); // clearTimeout, not cleartimeout..
+			}
+
+			onlongtouch = function() { alert("press for a long long time"); };	
+			
+			$("#Ex7").click(function(){
+				$("#console_line").empty();
+				$("#console_line").text(
+				'Html:\n'
+				+'	<button id="touchListener" ontouchstart="touchstart();" ontouchend="touchend();">long-time press</button>\n'
+				+'\nJS:\n'
+				+'	var onlongtouch; \n'
+				+'	var timer;\n'
+				+'	var touchduration = 2000; //length of time we want the user to touch before we do something\n'
+				+'	function touchstart() {\n'
+				+'		timer = setTimeout(onlongtouch, touchduration); \n'
+				+'	}\n'
+				+'	function touchend() {\n'
+				+'		//stops short touches from firing the event\n'
+				+'		if (timer)\n'
+				+'			clearTimeout(timer); // clearTimeout, not cleartimeout..\n'
+				+'	}\n'
+				+'	onlongtouch = function() { alert("press for a long long time"); };\n'	
+				);		
+			});
+			
+			/********************************************************/
+			$("#Ex0").click(function(){
+				$("#console_line").empty();
+				$("#console_line").text();		
+			});
+		</script>
+	</body>
+</html>

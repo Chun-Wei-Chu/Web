@@ -1,0 +1,89 @@
+﻿<!--------只是改變背景圖式選取要顯示的位置----->
+<html>
+	<head>
+		<style>
+			.scroll-image {
+				top:0;
+				background-size: cover;
+				position:relative; 
+				transition: top 1s ease; /*讓圖縮回去時看起來較為順暢*/
+				float:left;
+				width: 33.33%;
+				box-sizing: border-box;
+				border:1px solid #ccc;
+				overflow:hidden;
+				height:1000px;
+			}
+
+			.scroll-image:hover {
+				top:-300px; 
+				transition: top 1s ease;
+			}
+
+			.img1 {
+				background-image: url(http://placeimg.com/480/640/any);
+			}
+			.img2 {
+				background-image: url(http://placeimg.com/480/640/nature);
+			}
+			.img3 {
+				background-image: url(http://placeimg.com/480/640/animals);
+			}
+		</style>
+	</head>
+	
+	<body>
+		<div style="overflow:hidden;height:300px">
+			<div class='scroll-image img1'>
+				<div style="height:300px;background:#aaa;opacity: 0.5;"></div>
+				<div style="height:300px;background:#6b8;opacity: 0.5;"></div>
+			</div>
+			
+			<div class='scroll-image img2'></div>
+			<div class='scroll-image img3'></div>
+		</div>
+	</body>
+</html>
+
+<!--html>
+	<head>
+		<style>
+			.scroll-image {
+				background-position: top center;
+				background-size: cover;
+				transition: background-position 1s ease;
+				float:left;
+				width: 33.33%;
+				box-sizing: border-box;
+				border:1px solid #ccc;
+			}
+			.scroll-image:before {
+				padding-top: 56.25%;
+				content:"Hover Me";
+				color: white;
+				display: block;
+				text-align:center;
+			}
+			.scroll-image:hover {
+				background-position: bottom center;
+				transition: background-position 1s ease;
+			}
+
+			.img1 {
+				background-image: url(http://placeimg.com/480/640/any);
+			}
+			.img2 {
+				background-image: url(http://placeimg.com/480/640/nature);
+			}
+			.img3 {
+				background-image: url(http://placeimg.com/480/640/animals);
+			}
+		</style>
+	</head>
+	
+	<body>
+		<div class='scroll-image img1'></div>
+		<div class='scroll-image img2'></div>
+		<div class='scroll-image img3'></div>
+	</body>
+</html-->

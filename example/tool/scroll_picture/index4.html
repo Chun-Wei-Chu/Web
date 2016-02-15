@@ -1,0 +1,85 @@
+﻿<!--------圖片置中、浮標覆蓋時顯示內容----->
+<html>
+	<head>
+		<style>
+			.outerDiv {
+				height:300px;
+				width:300px;
+			}
+			
+			
+			.innerDiv {
+				background:#999;		
+				transition: opacity 1s ease, width 0.5s, height 0.5s; 
+				width:100%;
+				height:100%;
+				opacity:0;
+				position: relative;
+				margin: 0 auto;
+				top: 0%;
+			}
+
+			.innerDiv:hover {
+				width:90%;
+				height:90%;
+				opacity:0.8;
+				top: 5%;   /*(原本高度-後來高度)/2*/
+				transition: opacity 1s ease, width 0.5s, height 0.5s; 
+			}
+
+			.img1 {
+				background-image: url(http://placeimg.com/480/640/any);
+			}
+			
+		</style>
+	</head>
+	
+	<body>
+		<div class="outerDiv img1">
+			<div class="innerDiv"></div>
+		</div>
+	</body>
+</html>
+
+<!--html>
+	<head>
+		<style>
+			.scroll-image {
+				background-position: top center;
+				background-size: cover;
+				transition: background-position 1s ease;
+				float:left;
+				width: 33.33%;
+				box-sizing: border-box;
+				border:1px solid #ccc;
+			}
+			.scroll-image:before {
+				padding-top: 56.25%;
+				content:"Hover Me";
+				color: white;
+				display: block;
+				text-align:center;
+			}
+			.scroll-image:hover {
+				background-position: bottom center;
+				transition: background-position 1s ease;
+			}
+
+			.img1 {
+				background-image: url(http://placeimg.com/480/640/any);
+			}
+			.img2 {
+				background-image: url(http://placeimg.com/480/640/nature);
+			}
+			.img3 {
+				background-image: url(http://placeimg.com/480/640/animals);
+			}
+		</style>
+	</head>
+	
+	<body>
+		<div class='scroll-image img1'></div>
+		<div class='scroll-image img2'></div>
+		<div class='scroll-image img3'></div>
+	</body>
+</html-->

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh_TW">
+ <head>
+     <meta charset="Big5" />
+     <title>純 CSS 選單 Example</title>
+</head>
+<style>
+.slider_scroll
+{
+	top: 0;
+	left:-360px;
+	width:360px;	
+	position:fixed;
+	z-index:9999;
+}
+ 
+.slider_content{
+	background:#3c5a98;
+	text-align:center;
+	padding-top:20px;
+}
+ 
+.slider_tab {
+	position:absolute;
+	top:20px;
+	right:-24px;
+	width:24px;
+	background:#3c5a98;
+	color:#ffffff;
+	font-family:Arial, Helvetica, sans-serif;	
+	text-align:center;
+	padding:9px 0;
+ 
+	-moz-border-radius-topright:10px;
+	-moz-border-radius-bottomright:10px;
+	-webkit-border-top-right-radius:10px;
+	-webkit-border-bottom-right-radius:10px;	
+}
+.slider_tab span {
+	display:block;
+	height:12px;
+	padding:1px 0;
+	line-height:12px;
+	text-transform:uppercase;/*全大寫?*/
+	font-size:12px;
+}
+</style>
+<script type='text/javascript' src='http://code.jquery.com/jquery-1.9.1.min.js'></script>
+
+<body>
+<script>
+	InitialSliderWindow();
+		//});	
+	/*初始化數量*/
+	function InitialSliderWindow(){
+		createSliderWindow("mwt_slider_content_BookMark", "mwt_fb_tab_BookMark", "mwt_mwt_slider_scroll_BookMark","BookMark",0,0,0);
+		//$("#mwt_fb_tab_Test").attr("top",$("#mwt_fb_tab_BookMark").innerHeight+"px");
+		createSliderWindow("mwt_slider_content_Test", "mwt_fb_tab_Test", "mwt_mwt_slider_scroll_Test","Test","#cc5a98","140px",0);
+	}
+	
+	/*開始創建 (contentName, tabName, scrollName, 標籤名,標籤顏色,標籤位置,標籤內頁html)*/
+	function createSliderWindow(content, tab, scroll, name, colorBody, markLocation,innerHtml){
+		createSliderBody(content, tab, scroll, name, colorBody, markLocation,innerHtml);
+		sliderWindow(content, tab, scroll);
+	}
+	
+	/*htmlBody*/
+	function createSliderBody(content, tab, scroll, name, colorBody, markLocation,innerHtml){
+		var LeftSlider = "<div class='slider_scroll' id='"+scroll+"'>";
+		if(colorBody!=0){
+			if(markLocation!=0)
+				LeftSlider+="<div class='slider_tab' style='background:"+colorBody+";top:"+markLocation+";' id='"+tab+"'>";
+			else
+				LeftSlider+="<div class='slider_tab' style='background:"+colorBody+";' id='"+tab+"'>";
+			}
+		else{
+			if(markLocation!=0)
+				LeftSlider+="<div class='slider_tab' style='top:"+markLocation+";' id='"+tab+"'>";
+			else
+				LeftSlider+="<div class='slider_tab' id='"+tab+"'>";
+		}	
+		var getChar;
+		while(name.length>0){
+			getChar=name.replace(/(.)\w+/,"$1");
+			name = name.replace(/.(.*)/,"$1");
+			LeftSlider+="<span>"+getChar+"</span>";
+		}
+		LeftSlider+="</div>";
+		if(colorBody!=0)
+			LeftSlider+="<div class='slider_content' style='background:"+colorBody+";' id='"+content+"'>";
+		else
+			LeftSlider+="<div class='slider_content' id='"+content+"'>";
+		if(innerHtml!=0)
+			LeftSlider+=innerHtml;
+		LeftSlider+="</div>";
+		$("body").append(LeftSlider);
+	}
+	/*sliding script控制項*/
+	function sliderWindow(content, tab, scroll){
+		var w = $("#"+content).width();
+		$("#"+content).css('height', ($(window).height() - 20) + 'px' ); //將區塊自動撐滿畫面高度
+	 
+		$("#"+tab).mouseover(function(){ //滑鼠滑入時
+			if ($("#"+scroll).css('left') == '-'+w+'px')
+			{
+				$("#"+scroll).animate({ left:'0px' }, 600 ,'swing');
+			}
+		});
+			
+		$("#"+content).mouseleave(function(){　//滑鼠離開後
+			$("#"+scroll).animate( { left:'-'+w+'px' }, 600 ,'swing');	
+		});	
+	}
+ 
+</script>
+</body>
+</html>

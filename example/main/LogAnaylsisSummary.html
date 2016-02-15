@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html> 
+<head>
+<meta charset=utf-8> 
+
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
+	
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
+<style>
+	#mainTable td{text-align:center;background-color:#aaa;border:2px solid whitesmoke;}
+	#mainTable td:hover{cursor:pointer;background-color:silver;}
+</style>
+
+<style>
+path.slice{
+	stroke-width:2px;
+}
+polyline{
+	opacity: .3;
+	stroke: black;
+	stroke-width: 2px;
+	fill: none;
+} 
+svg text.percent{
+	fill:white;
+	text-anchor:middle;
+	font-size:12px;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  fill: orange;
+}
+
+.bar:hover {
+  fill: orangered ;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+</style>
+</head> 
+<body>
+<div align="center"> 
+	<div>
+		<table id="mainTable" width="600" border="0">
+			<tr align="center">
+				<td width=20% onclick="GoToLastPage()">上一頁</td>
+				<td width=10%>Range begin: <input id="mainTable_begin" type="text" placeholder="2015-01-01"/></td>
+				<td width=10%>Range end: <input id="mainTable_end" type="text" placeholder="2015-12-25"/></td>
+				<td width=20% onclick="CreateNewSummaryPage();">查詢</td>
+			<tr>
+			<tr align="center">
+				<td id="mainTableShowRange" colspan="4" width=100%></td>
+			</tr>
+		</table>
+	</div>
+	
+	<div id="graph_body">
+	</div>
+	
+	<div id="SummaryTable">
+	</div>
+</div>	
+	<script type="text/javascript"> 
+		var begin = location.href.split("?")[1].split("&")[0].split("=")[1],
+			end = location.href.split("?")[1].split("&")[1].split("=")[1],
+			lastPage = location.href.split("?")[1].split("&")[2].split("=")[1],
+			SelectTableName = location.href.split("?")[1].split("&")[3].split("=")[1];
+		
+		CreateSummaryPage();
+		
+		function GoToLastPage(){
+			window.location.assign(lastPage);
+		}
+		
+		function CreateNewSummaryPage(){
+			begin = document.getElementById('mainTable_begin').value;
+			end = document.getElementById('mainTable_end').value;
+			CreateSummaryPage();
+		}
+		
+		function CreateSummaryPage(){
+			document.getElementById("graph_body").innerHTML="";
+			document.getElementById("SummaryTable").innerHTML="";
+			
+			var getHttpRequest = "http://localhost:45450/logsvc/query/api=1|begin=" + begin + "|end=" + end+"|table="+SelectTableName;
+			$.ajax
+			(
+				{
+					type: 'GET',
+					url: getHttpRequest,
+					dataType: 'json',
+					success: function (response, type, xhr)
+					{
+						$("#status").text("");
+						/*開始畫圖*/	
+						if(response[0]!=undefined)
+							drawBarChart("graph_body", response);
+							drawSummaryTable(response);
+					},
+					error: function (xhr)
+					{
+					   $("#status").text("");
+					}
+				}
+			);
+			if(begin=="" || end=="")
+				$("#mainTableShowRange").text("Error");
+			else
+				$("#mainTableShowRange").text("Range: "+begin+" ~ "+end);
+		}
+		
+	function drawBarChart(DrawLocation, SummaryData){	
+		var svg2;
+		
+		//調整長條圖的邊界，調整left值可避免左側數值被切掉問題
+		var margin = {top: 80, right: 20, bottom: 60, left: 60},
+			width = (SummaryData.length*200+200)>960?960:(SummaryData.length*200+200) - margin.left - margin.right,
+			height = 500 - margin.top - margin.bottom;
+			
+			//.format(".n%")其中n代表顯示至小數點後幾位
+			var formatPercent = d3.format(".3%");
+			var x = d3.scale.ordinal()
+			.rangeRoundBands([0, width], .1);
+			var y = d3.scale.linear()
+			.range([height, 0]);
+			var xAxis = d3.svg.axis()
+			.scale(x)
+			.orient("bottom");
+			var yAxis = d3.svg.axis()
+			.scale(y)
+			.orient("left")
+			.tickFormat(formatPercent);
+			var tip = d3.tip()
+			.attr('class', 'd3-tip')
+			.offset([-10, 0])
+			.html(function(d) {
+				return "<strong>Date:</strong> <span>" + d.Date+ "</span></br>"+
+					"<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span></br>"+
+					"<strong>Fail:</strong> <span style='color:red'>" + d.Fail + "</span></br>"+
+					"<strong>Sucess:</strong> <span>" + d.Sucess + "</span></br>"+
+					"<strong>TreadReusage:</strong> <span>" + d.TreadReusage + "</span>";
+			});
+		function getRandomBar(data){
+				svg2 = d3.select("#"+DrawLocation).append("svg")
+				.attr("id","svg2Bar")
+				.attr("width", width + margin.left + margin.right)
+				.attr("height", height + margin.top + margin.bottom)
+				.append("g")
+				.attr("id","ShowBar")
+				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+				
+				svg2.call(tip);
+		//d3.tsv("data.tsv", type, function(error, data) {
+			  x.domain(data.map(function(d) { return d.Date; }));
+			  y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+
+			  svg2.append("g")
+				  .attr("class", "x axis")
+				  .attr("transform", "translate(0," + height + ")")
+				  .call(xAxis);
+			  
+			  svg2.append("g")
+				  .attr("class", "y axis")
+				  .call(yAxis)
+				.append("text")
+				  .attr("transform", "rotate(-90)")
+				  .attr("y", 6)
+				  .attr("dy", ".71em")
+				  .style("text-anchor", "end");
+
+			  svg2.selectAll(".bar")
+				  .data(data)
+				.enter().append("rect")
+				  .attr("class", "bar")
+				  .attr("x", function(d) { return x(d.Date); })
+				  .attr("width", x.rangeBand())
+				  .attr("y", function(d) { return y(d.frequency); })
+				  .attr("height", function(d) { return height - y(d.frequency); })
+				  .on('mouseover', tip.show)
+				  .on('mouseout', tip.hide);
+		}
+
+		function randomBar(){
+			return SummaryData.map(function(d){
+				return {Date:d.datetime, frequency:parseFloat(d.Fail)/(parseFloat(d.Success)+parseFloat(d.Fail)), 
+					Sucess:d.Success, Fail:d.Fail, TreadReusage: d.TreadReusage};});
+		}
+
+		function ViewRandomBar(){
+			getRandomBar(randomBar());
+		}
+
+		//var changeBar_timer = setInterval("ViewRandomBar()",timer);
+		ViewRandomBar();
+
+		function type(d) {
+		  d.frequency = +d.frequency;
+		  return d;
+		}
+	}
+	
+	var transform={};
+	function drawSummaryTable(SummaryData){
+		if(SummaryData[0]!=undefined){
+			var columns=[];
+			for(var key in SummaryData[0]){
+				columns.push(key);
+			}
+			var table = d3.select("#SummaryTable").append("table").attr("style","width:800px"),
+			thead = table.append("thead"),
+			tbody = table.append("tbody").attr("id",("SummaryTabletbody"));
+			thead.append("tr")
+				.attr("style", "background:#dddddd")
+				.selectAll("th")
+					.data(columns)
+				.enter()
+				.append("th")
+				.text(function(column) { return column; });
+			transform.index=0;
+			transform.SummaryData=SummaryData;
+			add_TableData(transform, tbody);
+		}
+	}
+	function add_TableData(table_inner_data, tbody){
+		var i;
+		for(i=table_inner_data.index;i < table_inner_data.index+30 && i<table_inner_data.SummaryData.length;i++){
+			var tr = tbody.append("tr");		
+			for(var key in table_inner_data.SummaryData[i]){
+				tr.append("td").text(table_inner_data.SummaryData[i][key]);
+			}
+		}
+		table_inner_data.index = i;
+	}
+	
+		/*偵測scroll行為，動態增加innerHtml*/
+	 $(window).bind('scroll', function() {
+         //console.log(window.innerHeight,window.scrollY ,document.body.offsetHeight);
+         
+         if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight)) {
+				add_TableData(transform, d3.select("#SummaryTabletbody"));
+          }
+      });
+	</script> 
+</body> 
+</html> 

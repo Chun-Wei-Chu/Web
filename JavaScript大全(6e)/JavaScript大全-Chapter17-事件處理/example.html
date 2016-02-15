@@ -1,0 +1,172 @@
+<html>
+	<head>
+		<style>
+			.draggable-element {
+			  width:560px;
+			  height:400px;
+			  background-color:#666;
+			  color:white;
+			  padding:10px 12px;
+			  border-radius: 5%;
+			  opacity:1;
+			  z-index:2;
+			  position:absolute; /* important (all position that's not `static`) */
+			}
+			
+			.move { width: 30px; height: 30px; background: #77a; position:absolute; left: -15px; bottom: -15px; cursor:move;}
+			.resizer { width: 5px; height: 5px; background: blue; position:absolute; right: 0; bottom: 0; cursor: se-resize; }
+			.close { width: 15px; height: 15px; background: red; position:absolute; right: 0; top: 0; cursor:default;}
+		</style>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	</head>
+	
+	<body>
+		<div style="position:absolute;right:0%;top:0%;width:400px;background:#bbb;opacity:0.9;border-radius: 5%;" align="center" valign="center">
+			<div style="width:90%;">
+				choose the video src :<input id="input_createNew"></input><button id="btn_createNew">send</button><br/>
+				<span>https://www.youtube.com/embed/szGb41hHUHs<span></br></br>
+				<span>https://www.youtube.com/embed/cSLAO7zxS2M<span></br></br>
+				<span>https://www.youtube.com/embed/GTU_GSTnDZE<span>
+			</div>
+		</div>
+		
+		<script>
+			/***************initial*****************/
+			addIframe("https://www.youtube.com/embed/sW3RT0tF020");
+			
+			function changeSelect(tmp){
+				$(".draggable-element").css("opacity","0.7");
+				$(".draggable-element").css("z-index","1");
+				$("iframe").css("pointer-events", "none");
+				
+				if(tmp!==null){
+					tmp.style.opacity=1;
+					tmp.style.zIndex=2;
+					var x = tmp.getElementsByTagName("iframe");
+					for(var i = 0;i<x.length;i++){
+						x[i].style.pointerEvents="auto";
+					}
+				}
+			}
+			
+		
+			/*透過mouse event建立類似drag - drog的行為*/
+			var selected = null;
+			
+			function _drag_init(elem) {
+				// Store the object of the element which needs to be moved
+				selected = elem;
+				x_elem = x_pos - selected.offsetLeft;
+				y_elem = y_pos - selected.offsetTop;
+			}
+
+			// Will be called when user dragging an element
+			function _move_elem(e) {
+				x_pos = document.all ? window.event.clientX : e.pageX;
+				y_pos = document.all ? window.event.clientY : e.pageY;
+				if (selected !== null) {
+					selected.style.left = (x_pos - x_elem) + 'px';
+					selected.style.top = (y_pos - y_elem) + 'px';
+				}
+			}
+
+			// Destroy the object when we are done
+			function _destroy() {
+				var x = selected.getElementsByTagName("iframe");
+				for(var i = 0;i<x.length;i++){
+					x[i].style.pointerEvents="auto";
+				}
+				selected = null;
+			}
+
+			// Bind the functions...
+			function Onmousedown(tmp) {
+				changeSelect(tmp);
+				
+				_drag_init(tmp);
+				return false;
+			};
+
+
+			document.onmousemove = _move_elem;
+			document.onmouseup = _destroy;
+			
+			$("#btn_createNew").click(function(){
+				addIframe($("#input_createNew").val());
+			});
+			
+			function addIframe(src){
+				changeSelect(null);
+				
+				$("body").append(
+						'<div id="tmp" class="draggable-element" onmousedown="changeSelect(this);" ontouchstart="changeSelect(this);">'
+						+'	<div class="move" onmousedown="Onmousedown(this.parentNode);" ontouchstart="touchstart(window.event, this.parentNode);" ontouchmove="touchmove(window.event, this.parentNode);"></div>'
+						+'	<div class="close" onclick="closeWindow(this);" ontouchstart="closeWindow(this);">x</div>'
+						+'	<div class="resizer" onmousedown="initDrag(window.event, this);"></div>'
+						+'	<div style="width:100%;height:100%;" align="center" valign="center">'
+						+'		<iframe style="width:90%;height:80%" src="'+ src +'" frameborder="0" allowfullscreen></iframe>'
+						+'		<br/><br/>'
+						+'		move me'
+						+'	</div>'
+						+'</div>'
+				);
+			}
+			
+			/**************************** resize select window ***********************************/
+			function initDrag(e, node) {
+			   p = node.parentNode;
+			   startX = e.clientX;
+			   startY = e.clientY;
+			   startWidth = parseInt(document.defaultView.getComputedStyle(p).width, 10);
+			   startHeight = parseInt(document.defaultView.getComputedStyle(p).height, 10);
+			   document.documentElement.addEventListener('mousemove', doDrag, false);
+			   document.documentElement.addEventListener('mouseup', stopDrag, false);
+			
+				/*暫時清空*/
+			   document.onmousemove = "";
+			}
+
+			function doDrag(e) {
+			   p.style.width = (startWidth + e.clientX - startX) + 'px';
+			   p.style.height = (startHeight + e.clientY - startY) + 'px';
+			}
+
+			function stopDrag(e) {
+				document.documentElement.removeEventListener('mousemove', doDrag, false);    document.documentElement.removeEventListener('mouseup', stopDrag, false);	
+				
+				/*恢復原本作用*/
+				document.onmousemove = _move_elem;
+			}
+			
+			/*********************** close window *************************/
+			function closeWindow(closed){
+				closed = closed.parentNode;
+				closed.parentNode.removeChild(closed);
+			}
+		
+			
+			/********************** ontouch listener ******************************/
+			var touchobj = null;
+ 
+			function touchstart(e, box2){
+				changeSelect(box2);
+				
+				touchobj = e.changedTouches[0];// reference first touch point
+				boxleft = box2.offsetLeft;// get left position of box
+				boxtop = box2.offsetTop;// get left position of box
+				startx = parseInt(touchobj.clientX); // get x coord of touch point
+				starty = parseInt(touchobj.clientY); // get x coord of touch point
+				e.preventDefault(); // prevent default click behavior
+			}
+		 
+			function touchmove(e, box2){
+				touchobj = e.changedTouches[0]; // reference first touch point for this event
+				box2.style.left = (boxleft + parseInt(touchobj.clientX) - startx ) + 'px';
+				box2.style.top = (boxtop + parseInt(touchobj.clientY) - starty ) + 'px';
+				e.preventDefault();
+			}
+
+		</script>
+	</body>
+</html>

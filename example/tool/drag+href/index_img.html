@@ -1,0 +1,55 @@
+<html>
+	<body>
+		<div id="div" ondrop="toDrop(event)" ondragover="allowDrop(event)">
+			<a  href="http://www.google.com"><img id="img" src="http://www.designbyfire.com/images/img_w3c_01.gif" draggable="true" ondragstart="beginDrag(event)"/></a>
+		</div>
+		<style>
+			#div {width:100%;height:100%;}
+			#img {position: relative;top:10px;left:10px;}
+		</style>
+		<script>
+			var IE = "ActiveXObject" in window ;
+			var nowObject = null ;
+			var offsetX = 0 , offsetY = 0 ;
+			var getMouseSite = function(e){
+				var tempX , tempY ;
+				if (IE) { 
+					tempX = event.clientX + document.body.scrollLeft ;
+					tempY = event.clientY + document.body.scrollTop;
+				} else {  
+					tempX = e.pageX ;
+					tempY = e.pageY ;
+				}	
+				return {x:tempX,y:tempY} ;
+			}
+
+			var beginDrag = function(e){
+				e.dataTransfer.setData("text", e.target.id);
+				var temp = getMouseSite(e) ;
+				var left = document.getElementById(e.target.id).style.left || 0 ;
+				if ( left !== 0 ){
+					left = parseFloat(document.getElementById(e.target.id).style.left);
+				}
+				var top = document.getElementById(e.target.id).style.top || 0 ;
+				if ( top !== 0 ){
+					top = parseFloat(document.getElementById(e.target.id).style.top);
+				}
+				offsetX = temp.x - left ; 
+				offsetY = temp.y - top ;
+			}
+
+
+			var toDrop = function(e){
+				e.preventDefault();
+				var temp = getMouseSite(e) ;
+				var data = e.dataTransfer.getData("text");
+				document.getElementById(data).style.top = temp.y -  document.getElementById(data).height + ( document.getElementById(data).height - offsetY ) ;
+				document.getElementById(data).style.left = temp.x - document.getElementById(data).width + ( document.getElementById(data).width - offsetX );
+			}
+
+			var allowDrop = function(e) {
+				e.preventDefault();
+		}
+		</script>
+	</body>
+</html>
