@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <title>Page 11</title>
+  <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
+  
+</head>
+
+<body>
+	<script>
+		var maxSpeed = {car:{value:300, text:"hello"}, bike:{value:60,text:"Oh oH"}, motorbike:{value:200,text:"what you mean"},
+			airplane:{value:1000,text:"magic power"}, helicopter:{value:400,text:"nice play"}, rocket:{value:8*60*60,text:"The best"}};
+			
+		//var maxSpeed = {car:300, bike:60, motorbike:200, airplane:1000, helicopter:400, rocket:8*60*60}
+			
+		var sortable = [];
+		for (var vehicle in maxSpeed)
+		{
+			//get array[ [name, {object}] , ... ]
+			sortable.push([vehicle, maxSpeed[vehicle]]);
+		}
+		sortable.sort(function(a, b) {return a[1].value - b[1].value});
+		
+		var buttons="";
+		for(var key in sortable)
+		{
+			buttons+='<button onclick="consoleFunction(\''+sortable[key][1].value+'\')">'+sortable[key][0]+'</button>'
+		}
+		
+		function consoleFunction(value)
+		{
+			console.log(value);
+		}
+		
+		document.body.innerHTML=buttons;
+		
+	</script>
+ 
+ 
+</body>
+
+</html>
