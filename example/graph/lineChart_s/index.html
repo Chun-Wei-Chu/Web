@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <title>Page 11</title>
+  <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  
+  <script src="page11.js"></script>
+  
+  	<style>
+
+	</style>
+	
+</head>
+
+<style>
+
+	body {
+	  font: 10px sans-serif;
+	}
+
+	.axis path,
+	.axis line {
+	  fill: none;
+	  stroke: #000;
+	  shape-rendering: crispEdges;
+	}
+
+
+	.line {
+	  fill: none;
+	  stroke: steelblue;
+	  stroke-width: 1.5px;
+	}
+
+</style>
+<body>
+<script>
+	var data=[
+		{x:0, y1:1},
+		{x:1, y1:2},
+		{x:2, y1:4},
+		{x:3, y1:8},
+		{x:4, y1:16},
+		{x:5, y1:32},
+		{x:6, y1:64},
+		{x:7, y1:128},
+		{x:8, y1:256},
+		{x:9, y1:512},
+		{x:10, y1:1024},
+		{x:11, y1:2048},
+		{x:12, y1:4096},
+	];
+
+</script>
+
+<script>
+
+	var margin = {top: 20, right: 20, bottom: 30, left: 50},
+		width = 960 - margin.left - margin.right,
+		height = 500 - margin.top - margin.bottom;
+
+	//for d.x is ("%d-%b-%y") ex: 15-May-07
+	/*
+	var formatDate = d3.time.format("%d-%b-%y");
+	function type(d) {
+	  d.date = formatDate.parse(d.date);
+	  d.y1 = +d.y1;
+	  return d;
+	}
+	*/
+	
+	var x = d3.time.scale()
+		.range([0, width]);
+
+	var y = d3.scale.linear()
+		.range([height, 0]);
+
+	var xAxis = d3.svg.axis()
+		.scale(x)
+		.orient("bottom")
+		.ticks(0);
+
+	var yAxis = d3.svg.axis()
+		.scale(y)
+		.orient("left")
+		.ticks(0);
+
+	var svg = d3.select("body").append("svg")
+		.attr("width", width + margin.left + margin.right)
+		.attr("height", height + margin.top + margin.bottom)
+	  .append("g")
+		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	 svg.append("g")
+		 .attr("class", "x axis")
+		 .attr("transform", "translate(0," + height + ")")
+		 .call(xAxis);
+
+	svg.append("g")
+		.attr("class", "y axis")
+		.call(yAxis);
+
+	var line = d3.svg.line()
+		.interpolate('cardinal')
+		.x(function(d) { return x(d.x); })
+		.y(function(d) { return y(d.y1); });
+	x.domain(d3.extent(data, function(d) { return d.x; }));
+	y.domain(d3.extent(data, function(d) { return d.y1; }));
+
+	svg.append("path")
+		.datum(data)
+		.attr("class", "line")
+		.attr("d", line);
+
+</script>
+</body>
+</html>
