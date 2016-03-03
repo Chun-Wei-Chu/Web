@@ -1,0 +1,113 @@
+﻿<!DOCTYPE HTML>
+<html>
+	<head>
+		<style>
+			html,body,table{
+				height: 100%;
+			}
+			
+			div::-webkit-scrollbar { 
+				display: none; 
+			}
+	
+		</style>
+		<!-- 最新編譯和最佳化的 CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		
+		<!-- 內嵌程式碼上色 -->
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/styles/tomorrow.min.css">
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/highlight.min.js"></script>
+		
+	</head>
+	
+	<body style="font-family:cursive;">
+		<table  border="0" style="width:100%;height:98%;text-align: center;">
+			<tr >
+			
+				<!----------------左側examples----------------->
+				<td style="width:60%;height:100%;">
+					<div style="width:98%;overflow:scroll;overflow-x:hidden;height:100%;">
+					
+						<div class="panel panel-default">
+						  <div class="panel-heading">CSS selectors<button id="Ex1" style="float:right;">show code</button></div>
+						  <div class="panel-body">
+	
+						  </div>
+						</div>
+						
+						<!------------------------example Html 模板------------------------------>
+						<br/>
+						
+						<div class="panel panel-default">
+							 <div class="panel-heading">onclick and addEventListener <button id="Ex0" style="float:right;">show code</button></div>
+							 <div class="panel-body">
+								
+							 </div>
+						</div>
+						
+					</div>
+				</td>
+				
+				<!----------------右側console----------------->
+				<td style="width:40%;height:100%;">
+					<div id="console" class="panel panel-default" style="width:100%;height:100%;overflow:scroll;overflow-x:hidden;">
+					  <div class="panel-heading">console<button onclick="requireFullscreen();" style="float:right;">fullScreen</button><button id="btn_ClearConsole" style="float:right;">clear</button></div>
+					  <div class="panel-body">
+						  <pre><code  id="console_line" style="text-align: left;">
+							456
+							</code></pre>
+					  </div>
+					</div>				
+				</td>
+			</tr>
+		</table>
+
+		<script>
+			/*全螢幕*/
+			function launchIntoFullscreen(element) {
+			  if(element.requestFullscreen) {
+				element.requestFullscreen();
+			  } else if(element.mozRequestFullScreen) {
+				element.mozRequestFullScreen();
+			  } else if(element.webkitRequestFullscreen) {
+				element.webkitRequestFullscreen();
+			  } else if(element.msRequestFullscreen) {
+				element.msRequestFullscreen();
+			  }
+			}		
+			
+			function requireFullscreen(){
+				launchIntoFullscreen(document.getElementById("console"));
+			}
+			
+			/*懶得整理可以把檔案內容全部讀出*/
+			function getTextFromSource(source){
+				$.get(source, function(response) { $("#console_line").text(response); });
+			}	
+				
+			$("#btn_ClearConsole").click(function(){
+				$("#console_line").empty();
+			});
+			
+			/*JS code在console端顯示*/
+			$("#Ex0").click(function(){
+				$("#console_line").text();
+				
+				/*內嵌程式碼上色*/
+				$("#console_line").each(function(i, block) {
+					hljs.highlightBlock(block);
+				});
+			});
+			
+			/*
+				//如果不想排版的話
+				$("#Ex0").click(function(){
+					getTextFromSource(sourceName);
+				});
+			*/
+
+		</script>
+		
+	</body>
+</html>
