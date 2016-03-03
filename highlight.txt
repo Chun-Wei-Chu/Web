@@ -1,0 +1,13 @@
+一個用於html的套件
+
+可以自動幫程式碼上色
+
+有利於製作教學網站時標記不同類型的標頭
+
+網址:
+  https://highlightjs.org/download/
+  https://github.com/isagalaev/highlight.js/tree/master/src/styles
+
+用法:
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/styles/default.min.css">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/highlight.min.js"></script>
