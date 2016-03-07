@@ -1,0 +1,21 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
+
+<ul class="nav nav-tabs nav-justified">
+  <li class="active"><a href="#">Home</a></li>
+  <li ><a href="#">Menu 1</a></li>
+  <li ><a href="#">Menu 2</a></li>
+  <li ><a href="#">Menu 3</a></li>
+</ul>
+
+<!-- 測試用 -->
+<script>
+  $("ul li").click(function()
+  {
+    for(var key in this.parentNode.children)
+    {
+      this.parentNode.children[key].className="";
+    }
+    this.className="active";
+  });
+</script>
