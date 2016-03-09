@@ -1,0 +1,42 @@
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="multiSelect.css">
+<script src="multiSelect.js"></script>
+
+  <div class="col-xs-2">
+    <select id="example-getting-started" multiple="multiple" class="form-control col-lg-12 col-md-12 col-sm-4 col-xs-12">
+      <option value="cheese">Cheese</option>
+      <option value="tomatoes">Tomatoes</option>
+      <option value="mozarella">Mozzarella</option>
+      <option value="mushrooms">Mushrooms</option>
+      <option value="pepperoni">Pepperoni</option>
+      <option value="onions">Onions</option>
+    </select>
+  </div>
+
+<div class="col-xs-2">
+  <div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+    <input type="text" class="form-control" style="display:inline-block" Placeholder="test"></input>
+    <span class="caret"></span></button>
+    <ul class="dropdown-menu">
+      <li value="HTML"><a href="#">HTML</a></li>
+      <li value="CSS"><a href="#">CSS</a></li>
+      <li value="JavaScript"><a href="#">JavaScript</a></li>
+    </ul>
+  </div>
+</div>
+
+
+<script>
+  可輸入字串的button 
+  $("ul li").click(function()
+  {
+    this.parentNode.parentNode.children[0].children[0].value=this.getAttribute("value");
+  });
+  
+  //multiSelect
+  $('#example-getting-started').multiselect();
+</script>
