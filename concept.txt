@@ -1,2 +1,5 @@
 在table中，text本身是不具有實質意義的長寬，所以若要定義其td大小，需要加入div將其空間先規劃出來，而在順序方面，這種方法只適合用style調整
+table基本上就是一個很麻煩的東西，內容物盡量都在用一層div去包裝，可以省去很多麻煩
 
+大圖中擷取所需部位(icon)
+教學: http://www.w3schools.com/css/css_image_sprites.asp
