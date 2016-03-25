@@ -1,0 +1,26 @@
+<div class="dropdown keep-open">
+    <!-- Dropdown Button -->
+    <button id="dLabel" role="button" href="#"
+       data-toggle="dropdown" data-target="#" 
+       class="btn btn-primary">
+        Dropdown <span class="caret"></span>
+    </button>
+    
+    <!-- Dropdown Menu -->
+    <ul class="dropdown-menu" role="menu" 
+        aria-labelledby="dLabel">
+        <li><a href="#">Action</a></li>
+        <li><a href="#">Another action</a></li>
+        <li><a href="#">Something else here</a></li>
+        <li class="divider"></li>
+        <li><a href="#">Separated link</a></li>
+    </ul>
+</div>
+
+<script>
+  $('.dropdown.keep-open').on({
+    "shown.bs.dropdown": function() { this.closable = false; },  //開啟時執行動作
+    "click":             function() { this.closable = true; }, //click~~~
+    "hide.bs.dropdown":  function() { return this.closable; }  //關閉~~
+  });
+</script>
