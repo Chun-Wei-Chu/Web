@@ -1,3 +1,27 @@
 蠻有趣的解法
 
 http://jsfiddle.net/duez1pd1/
+
+-----------------------------------------------------------
+
+http://jsfiddle.net/VfrkK/100/
+>
+<header-wrapper> //fixed and x-axis move with row-wrapper's x-axis
+some :<tr><td>
+<row-wrapper>
+some :<tr><td>
+some :<tr><td>
+some :<tr><td>
+some :<tr><td>
+
+$headerDiv = $('.header-wrapper');
+$rowDiv = $('.row-wrapper');
+$rowDiv.scroll(function(e) {
+    $headerDiv.css({
+        left: -$rowDiv[0].scrollLeft + 'px'
+    });
+});
+
+-----------------------------------------------------------
+總歸一句 要嘛花時間找，還可能找不到
+不然就自己刻 工具都是需要花時間解決的
