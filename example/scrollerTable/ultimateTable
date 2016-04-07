@@ -1,0 +1,99 @@
+這是一篇紀載全自製 table的技巧 
+也就是觀念 目前做過最容易製作客製化table的方法
+
+講解前的觀念解說:
+*現在js 的速度相當的快，所以用純css並未能提升多少速度，只是可以不用用到js罷了
+
+*將table fix助對於大型table並無明顯幫助
+
+*用div 將取代像tbody, thead, table等元素能提升一些看的見的效能，也可以減少許多未知的錯誤發生，
+ 例如table常會做到render的動作，導致結果與預期不一致
+ 
+*如果要使用tr td的自動排列(排成一行調間距等)，可在裡面多加一層div讓他們形狀大小更能符合使用者預期
+ ex:<td><div style="...">something</div></td>
+ 
+*jq的selector雖然是一個很好用的工具，但當資料量過大時，尋找的時間會成指數成長，所以table過大時盡量少用
+ 由於尋找的時間過長，可以用一些記憶體空間去佔存不要每次都去重新尋找
+ 一次放入大量element到頁面中，雖然能有較高的效率，但回應性方面也要作取捨
+
+*table過大時如果使用Loop執意要一次性完成所有任務，會使得loop將資源全部佔住造成不好的回應性，雖然這樣速度比較快
+ 比較好得作法是，透過setTimeout遞迴呼叫，如一來就能得到較好的回應性，但比較慢
+ 
+*資料量過多載入前端頁面時，會使的頁面不夠滑順，會有快當掉的錯覺，所以多於沒用到的資料可以選擇放在記憶體中，如果有足夠空間的話
+ ，但通常資料量要超過幾G也是很難做到的
+
+----------------------------------------------------------
+table製作:
+*將header fix住
+ 方法很多，有些人會選擇用CSS網路上也有很多函式的提供者，但要用別人的函式就要有被綁手綁腳的心理準備，
+ 如果要搞得很複雜，要求很多，最好還是自己實作
+ 
+ 目前最好的方法是，使用內層div將td撐開，利用陣列，記錄所有欄位的寬度然後依序固定所有欄位的大小，
+ 或許有人會認為這樣需要花費很多計算時間，但對於js而言這根本小菜
+ 
+ 最後，只要讓上下部分分開操作(style"display:block")，就完成最基礎的header fix table了
+ 
+*但如果欄位過多怎麼辦(畫面未必夠長，所以可能被隱藏)?
+ 如此製作的table會有一個問題，因為header是不會動，所以不會有scroller y的問題發生，但scroller x就不一樣了
+ 對此我們需要使用scroller監聽事件，在這scroll的值一定會大於0，從螢幕左上角開始算的
+ 
+ body.scroll(function(e) {
+  $(header[0]).parent().css({
+    left: -body[0].scrollLeft + 'px'
+  });
+ });
+ 
+ 如此一來header就會隨著body一起移動了(範例中變數並不代表實際變數)
+ 
+*這樣做能確保table基本顯示方式都正常，但資料量如果過多，可能導致回應性不好
+ 對此我們需要遞迴式的使用setTimeout循序加入資料:
+ 
+ var j = 0,
+   Loop = data.ticks.length,
+   requestAnimationFrame =
+   window.requestAnimationFrame ||
+   window.mozRequestAnimationFrame ||
+   window.webkitRequestAnimationFrame ||
+   window.msRequestAnimationFrame,
+
+   /*透過遞迴呼叫防止畫面定格*/
+   doRequestFrame = function() {
+     if (++j < Loop) {
+       //doSomething 
+        
+       if (requestAnimationFrame) {
+         requestAnimationFrame(doRequestFrame);
+       } else {
+         setTimeout(doRequestFrame, 0);
+       }
+     }
+   };
+  requestAnimationFrame ? requestAnimationFrame(doRequestFrame) : doRequestFrame();
+  
+至於依次執行幾筆才能在回應性和效能間取得平衡，這又要慢慢試囉
+
+*如此一來對付大型table我們也有了不錯的回應性，但對於使用setTimeout遞迴製作的table會有一個問題，就是我們不知道該什麼時候停止他
+ 所以在這我們可以透過加入函式判斷讓他跳出遞迴:
+ 
+ if(tmpThis.Timeout==1)
+ {
+  return;
+ }
+ 
+ 這樣每當執行時他會先去檢查，對於js這類非同步IO，全部function一起亂跑切換，相互判斷是一種技巧，
+ 我們不能知道他什麼時候會停，但讓他停下來還是做得到的
+ 為什麼我們之前不使用loop + setTimeout原因就在這，如果一次把所有setTimeout放入排程中，那就沒辦法準確的全部一起刪除了
+ 即使有clearTimeout，但沒人能保證他會在setTimeout前被執行
+ 
+*最後，一次性載入所有table data雖然很方便，寫起來也很簡單，但table過大時，這這這...頭會痛到不是炸裂就能解決的:
+
+ 對此，我們需要再次靠scroller去動態載入資料
+ 由於，js對於資料的處理異常的快，對於資料量不多時，一次性載入片段html element(不是一行行)也是夠快的(也要看載入的是不是變態多，太變態也是會卡)
+ 集合這兩點接下來就是運算上的問題囉
+ 
+ 首先我們要先用最外層，限制tbody顯示大小
+ 接著，用中間層取得所有tr加起來的總高度，把這一層撐開創造出scorller y
+ 最後，最內層監聽中間層的scroller Y，加入style="position:relative"，讓他能自由移動，然後資料就寫在這一層上
+ 
+ 至於資料顯示方式(範圍)就靠大家自己運算囉，怎麼樣才能使得畫面較為流暢呢這也是要經驗啊
+ 
