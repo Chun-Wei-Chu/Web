@@ -3,3 +3,6 @@ table基本上就是一個很麻煩的東西，內容物盡量都在用一層div
 
 大圖中擷取所需部位(icon)
 教學: http://www.w3schools.com/css/css_image_sprites.asp
+
+ES6
+http://es6.ruanyifeng.com/#docs/string
